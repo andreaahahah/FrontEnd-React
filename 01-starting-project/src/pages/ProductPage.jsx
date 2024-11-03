@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Carousel } from 'primereact/carousel';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import ioecri from "../Components/ioecri.jpg"
+import ioecri from "../Components/pantalone.jpg"
 import { Dialog } from 'primereact/dialog';
 import Popup from "../Components/Popup";
 

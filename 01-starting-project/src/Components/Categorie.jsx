@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Carousel } from 'primereact/carousel';
 import { Tag } from 'primereact/tag';
-import ioecri from './ioecri.jpg';
+import ioecri from './pantalone.jpg';
 import classes from "../ComponentsCss/Categories.module.css"
 
 

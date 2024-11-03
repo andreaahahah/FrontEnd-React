@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import classes from "../ComponentsCss/Ricerca.module.css"
-import ioecri from './ioecri.jpg';
+import ioecri from './pantalone.jpg';
 
 
 export default function Prodotti(){
@@ -35,7 +35,6 @@ export default function Prodotti(){
                         <img src={product.image} alt={product.title} />
                         <div className={classes["product-info"]}>
                             <h3>{product.title}</h3>
-                            <p>{product.description}</p>
                             <p style={{ fontWeight: 'bold' }}>${product.price.toFixed(2)}</p>
                             
                         </div>

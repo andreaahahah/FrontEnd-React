@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import classes from "../ComponentsCss/SignUp.module.css"
 import { AuthContext } from "../GlobalContext/AuthContext";
 
+
 function  SignUp(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,6 +13,7 @@ function  SignUp(){
     const handleSignUp=()=>{
         if(email && password && name && surname){
         login({email:email,password:password,name:name,surname:surname})}
+        
         
     }
 

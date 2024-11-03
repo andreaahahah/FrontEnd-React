@@ -25,9 +25,9 @@
   
   .product-item img {
     width: 100%;
-    height: 150px;
-    object-fit: cover;
-  }
+    height: auto; /* Assicura che l'altezza sia adattata */
+    object-fit: contain; /* Mantiene l'intera immagine visibile */
+}
   
   .product-info {
     padding: 1rem;
