@@ -1,0 +1,66 @@
+/* Login.module.css */
+
+.login-container {
+    display: flex;
+<<<<<<< HEAD
+    flex-direction: column; /* Disposizione verticale */
+    align-items: center;
+    gap: 10px; /* Aggiunto gap per controllare la distanza tra il titolo e il form */
+    height: 100vh;
+    background-color: #f0f2f5;
+    padding: 0; /* Assicurati che non ci sia padding */
+    margin: 0; /* Assicurati che non ci siano margini */
+}
+
+.titolo {
+    text-align: center;
+    margin-top: 50px;
+    padding-bottom: 10px; /* Eventuale padding se vuoi controllare la distanza */
+}
+
+
+=======
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Occupa tutta l'altezza della finestra */
+    background-color: #f0f2f5; /* Colore di sfondo chiaro */
+}
+
+>>>>>>> d1e7933 (creato il login)
+.login-form {
+    background-color: white; /* Colore di sfondo del modulo */
+    border-radius: 8px; /* Angoli arrotondati */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Ombra per il modulo */
+    padding: 30px; /* Aumentato per più spazio interno */
+    width: 400px; /* Aumentata la larghezza per un aspetto più spazioso */
+}
+
+.login-input {
+    width: 100%; /* Occupa tutta la larghezza del modulo */
+    padding: 12px; /* Aumentato per più spazio interno */
+    margin: 12px 0; /* Maggiore margine verticale tra gli input */
+    border: 1px solid #ccc; /* Bordo grigio */
+    border-radius: 4px; /* Angoli arrotondati */
+    font-size: 16px; /* Dimensione del testo */
+}
+
+.login-input:focus {
+    border-color: #007bff; /* Colore del bordo quando l'input è in focus */
+    outline: none; /* Rimuovi il bordo di default */
+}
+
+.login-button {
+    width: 100%; /* Occupa tutta la larghezza del modulo */
+    padding: 12px; /* Aumentato per più spazio interno */
+    background-color: #007bff; /* Colore di sfondo del bottone */
+    color: white; /* Colore del testo */
+    border: none; /* Rimuovi il bordo di default */
+    border-radius: 4px; /* Angoli arrotondati */
+    font-size: 16px; /* Dimensione del testo */
+    cursor: pointer; /* Cambia il cursore a mano */
+    transition: background-color 0.3s; /* Transizione per il colore di sfondo */
+}
+
+.login-button:hover {
+    background-color: #0056b3; /* Colore di sfondo al passaggio del mouse */
+}

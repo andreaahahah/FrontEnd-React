@@ -1,0 +1,100 @@
+.h2 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: serif;
+}
+
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    justify-items: center;
+  }
+  
+  .product-item {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .product-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  .product-info {
+    padding: 1rem;
+  }
+  
+  .product-info h3 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .product-info p {
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .add-to-cart {
+    width: 100%;
+    background: linear-gradient(135deg, #BF2D4D, #BF3B2B); /* Colori più scuri */
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem; /* Aumentato leggermente il font-size */
+    border-radius: 0.5rem; /* Bordi arrotondati */
+    cursor: pointer;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Ombreggiatura leggera */
+    transition: all 0.3s ease;
+}
+
+
+.add-to-cart:hover {
+    background: linear-gradient(135deg, #FF4B2B, #FF416C); /* Cambiamento di colore al passaggio del mouse */
+    transform: translateY(-3px); /* Effetto "sollevato" */
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2); /* Ombreggiatura più profonda */
+}
+
+.add-to-cart:active {
+    transform: translateY(0); /* Riduce il sollevamento quando clicchi */
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* Diminuisce l'ombra */
+}
+
+
+.product-item button {
+    background-color: #fdfffe; /* Colore di sfondo verde */
+    color: black; /* Testo bianco */
+    border: none; /* Nessun bordo */
+    padding: 0.5rem; /* Padding interno */
+    font-size: 0.9rem; /* Dimensione del font */
+    border-radius: 0.3rem; /* Bordi arrotondati */
+    cursor: pointer; /* Cambia il cursore al passaggio */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+    transition: all 0.3s ease; /* Transizione per effetti */
+    width: 100%; /* Larghezza al 100% */
+}
+
+.product-item button:hover {
+    background-color: #c4c4c4; /* Colore di sfondo più scuro al passaggio del mouse */
+    transform: translateY(-2px) scale(1.05);; /* Effetto "sollevato" */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombra più profonda */
+}
+
+.product-item button:active {
+    transform: translateY(0); /* Riduce il sollevamento quando clicchi */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Diminuisce l'ombra */
+}
+
+
+
+  

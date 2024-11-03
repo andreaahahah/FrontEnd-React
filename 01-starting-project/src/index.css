@@ -1,0 +1,81 @@
+/* Reset di base e stili generali */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #efefef;
+  color: #1f2937;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Header */
+header {
+  position: fixed;        /* Mantiene l'elemento fisso */
+  top: 0;                 /* Fissa l'header alla parte superiore della finestra */
+  left: 0;
+  width: 100%;            /* Copre tutta la larghezza */
+  z-index: 1000;          /* Assicura che l'header sia sopra altri elementi */
+  background-color: #991b1b;
+  color: white;
+  padding: 2rem 0;
+}
+.page-content {
+  padding-top: 150px; /* Compensa l'altezza dell'header fisso per evitare sovrapposizione con i contenuti */
+}
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.site-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  font-family: serif;
+  letter-spacing: 0.05em;
+  flex-grow: 1;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+}
+
+
+.modern-input {
+  width: 200px;
+  padding: 7px 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: white;
+  outline: none;
+  font-size: 14px;
+
+}
+
+.p-carousel .p-carousel-indicator {
+  display: none;
+}
+
+
+
+
+

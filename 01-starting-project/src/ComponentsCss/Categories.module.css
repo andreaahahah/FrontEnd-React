@@ -1,0 +1,118 @@
+main {
+    padding: 2rem 0;
+  }
+  
+  h2 {
+    font-size: 1.875rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    font-family: serif;
+    padding: 3rem;
+  }
+
+  .carousel-container {
+    max-width: 80vw; /* Occupa il 90% della larghezza della viewport */
+    width: 100%;
+    min-width: 300px; /* Larghezza minima per evitare layout troppo stretti */
+    margin: 0 auto;
+  }
+  
+
+  .cate-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease; 
+  }
+
+  .cate-button:hover {
+    transform: scale(1.1); 
+  }
+  
+  
+  .categories {
+    margin-bottom: 3rem;
+  }
+  
+  .categories-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .categories-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    max-width: 48rem;
+  }
+  
+  .categories-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .category-item {
+    flex-shrink: 0;
+    width: 6rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-right: 1rem;
+    transition: box-shadow 0.3s ease;
+  }
+
+   .category-item button {
+    background-color: white; 
+    color: gray; 
+    border: none; 
+    padding: 0.5rem;
+    font-size: 0.9rem; 
+    border-radius: 0.3rem;
+    cursor: pointer; 
+    
+}
+  .category-item:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .category-item img {
+    width: 100%;
+    height: 6rem;
+    object-fit: cover;
+  }
+  
+  .category-item h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem;
+  }
+ 
+  
+  .scroll-button {
+    background-color: #991b1b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .scroll-button:hover {
+    background-color: #7f1d1d;
+  }
+  
+  .p-carousel .p-carousel-indicator {
+    display: none;
+  }
+  
+ 

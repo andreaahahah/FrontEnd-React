@@ -1,0 +1,24 @@
+.customDialog {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.customDialog, .p-dialog {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(12, 12, 12, 0.2);
+}
+
+.customDialog, .p-dialog-header {
+    background-color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.customDialog, .p-dialog-content {
+    padding: 20px;
+    font-size: 1rem;
+    color: #333;
+}
+
+

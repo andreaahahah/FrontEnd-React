@@ -1,0 +1,112 @@
+.buttons-container {
+  display: flex;
+  justify-content: center; /* Centra i bottoni orizzontalmente */
+  align-items: center; /* Centra i bottoni verticalmente */
+  flex-direction: column; /* Dispone i bottoni in colonna */
+  position: relative;
+  width: 100%; /* Il contenitore occupa tutta la larghezza disponibile */
+}
+<<<<<<< HEAD
+.button-container {
+  display: flex;
+  justify-content: start; /* Centra i bottoni orizzontalmente */
+  align-items:start; /* Centra i bottoni verticalmente */
+  position:fixed;
+  width: 100%; /* Il contenitore occupa tutta la larghezza disponibile */
+}
+=======
+>>>>>>> d1e7933 (creato il login)
+
+.login-btn, .register-btn {
+  width: 200px; /* Imposta una larghezza fissa per i bottoni */
+  margin: 10px 0; /* Aggiunge margine verticale tra i bottoni */
+  color: white;
+  border: none;
+  padding: 1rem; /* Aumenta il padding per rendere i bottoni più grandi */
+  font-size: 1.25rem; /* Aumenta la dimensione del font */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+/* Stile del pulsante di login */
+.login-btn {
+  background: linear-gradient(135deg, #BF2D4D, #BF3B2B); /* Colori rossi scuri */
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #FF4B2B, #FF416C); /* Cambia al passaggio del mouse */
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile del pulsante di registrazione */
+.register-btn {
+  background: linear-gradient(135deg, #2D74BF, #2B3BBF); /* Colori blu scuri */
+}
+
+.register-btn:hover {
+  background: linear-gradient(135deg, #4B9BFF, #416CFF); /* Cambia al passaggio del mouse */
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.register-btn:active {
+  transform: translateY(0);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+<<<<<<< HEAD
+.logout-btn {
+  background: linear-gradient(135deg, #af2020, #af2020); /* Colori rossi scuri */
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #ff2600, #ff2600); /* Cambia al passaggio del mouse */
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+.logout-btn {
+  position: absolute; /* Posiziona il bottone in modo assoluto */
+  top: 200px; /* Distanza dal bordo superiore */
+  left: 20px; /* Distanza dal bordo sinistro */
+  width: 120px; /* Larghezza fissa per i bottoni */
+  margin: 0; /* Rimuovi i margini verticali */
+  color: white;
+  border: none;
+  padding: 1rem; /* Aumenta il padding per rendere i bottoni più grandi */
+  font-size: 1.25rem; /* Aumenta la dimensione del font */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+
+=======
+>>>>>>> d1e7933 (creato il login)
+/* Centra il testo negli h2 e h3 */
+h2, h3 {
+  text-align: center; /* Centra il testo */
+  margin: 10px 0; /* Margine verticale per separare gli h2 e h3 dal resto */
+}
+
+/* Stile per h2 */
+h2 {
+  font-size: 2rem; /* Dimensione del font per h2 */
+  color: #333; /* Colore del testo */
+}
+
+/* Stile per h3 */
+h3 {
+  font-size: 1.5rem; /* Dimensione del font per h3 */
+  color: #505050; /* Colore del testo */
+}
