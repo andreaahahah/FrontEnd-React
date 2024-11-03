@@ -6,21 +6,18 @@ import { useContext } from "react";
 function  ProfilePage(){
 
     const { isAuthenticated, user, login, logout } = useContext(AuthContext);
-<<<<<<< HEAD
+
     console.log(user);
 
     const handleLogOut=()=>{
         logout();
     }
-=======
-    console.log(user)
->>>>>>> d1e7933 (creato il login)
 
     return(
         <> 
           
             {isAuthenticated? (
-<<<<<<< HEAD
+
                 <div >
                     
                     <button className={classes["logout-btn"]} onClick={handleLogOut}>LOGOUT</button>
@@ -29,11 +26,7 @@ function  ProfilePage(){
                     <h3> {user?.email}</h3> 
                     <h3> {user?.surname}</h3>
                     <h3> {user?.password}</h3>{/**solo per debug */}
-=======
-                <div>
-                    <h2>BENTORNATO {user?.name} </h2>
-                    <h3> {user?.password}</h3> {/**solo per debug */}
->>>>>>> d1e7933 (creato il login)
+
                 </div>
             ):(
                 <div>

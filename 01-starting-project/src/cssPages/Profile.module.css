@@ -6,7 +6,7 @@
   position: relative;
   width: 100%; /* Il contenitore occupa tutta la larghezza disponibile */
 }
-<<<<<<< HEAD
+
 .button-container {
   display: flex;
   justify-content: start; /* Centra i bottoni orizzontalmente */
@@ -14,8 +14,6 @@
   position:fixed;
   width: 100%; /* Il contenitore occupa tutta la larghezza disponibile */
 }
-=======
->>>>>>> d1e7933 (creato il login)
 
 .login-btn, .register-btn {
   width: 200px; /* Imposta una larghezza fissa per i bottoni */
@@ -63,7 +61,7 @@
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-<<<<<<< HEAD
+
 .logout-btn {
   background: linear-gradient(135deg, #af2020, #af2020); /* Colori rossi scuri */
 }
@@ -91,9 +89,7 @@
 }
 
 
-=======
->>>>>>> d1e7933 (creato il login)
-/* Centra il testo negli h2 e h3 */
+
 h2, h3 {
   text-align: center; /* Centra il testo */
   margin: 10px 0; /* Margine verticale per separare gli h2 e h3 dal resto */

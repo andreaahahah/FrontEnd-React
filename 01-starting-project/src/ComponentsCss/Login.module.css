@@ -2,7 +2,7 @@
 
 .login-container {
     display: flex;
-<<<<<<< HEAD
+
     flex-direction: column; /* Disposizione verticale */
     align-items: center;
     gap: 10px; /* Aggiunto gap per controllare la distanza tra il titolo e il form */
@@ -19,14 +19,7 @@
 }
 
 
-=======
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Occupa tutta l'altezza della finestra */
-    background-color: #f0f2f5; /* Colore di sfondo chiaro */
-}
 
->>>>>>> d1e7933 (creato il login)
 .login-form {
     background-color: white; /* Colore di sfondo del modulo */
     border-radius: 8px; /* Angoli arrotondati */
