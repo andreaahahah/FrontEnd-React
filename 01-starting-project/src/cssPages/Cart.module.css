@@ -1,0 +1,68 @@
+.cartContainer {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cartItem {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.removeButton {
+    background-color: #ff4444; /* Colore di sfondo rosso per il pulsante di rimozione */
+    color: white; /* Testo bianco per contrasto */
+    border: none; /* Rimuovi il bordo predefinito */
+    padding: 8px 12px; /* Padding per renderlo più spesso */
+    border-radius: 4px; /* Angoli arrotondati */
+    cursor: pointer; /* Cambia il cursore per indicare che è cliccabile */
+    outline: none;
+}
+.removeButton:hover {
+    background-color: #ff0000; /* Cambia il colore di sfondo quando si passa il mouse sopra */
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between; /* Spazio tra i due pulsanti */
+    margin-top: 20px;
+}
+
+.checkoutButton {
+    flex: 1;
+    margin-right: 10px; /* Spazio tra i pulsanti */
+    padding: 10px 15px; /* Aggiungi padding per renderlo più spesso */
+    font-size: 16px; /* Aumenta la dimensione del font */
+}
+
+.clearButton {
+    flex: 0.5; /* Pulsante più piccolo per svuotare il carrello */
+    background-color: red;
+    border: none;
+    padding: 10px 15px; /* Aggiungi padding per renderlo più spesso */
+    font-size: 16px; /* Aumenta la dimensione del font */
+    color: white; /* Testo bianco per contrasto */
+}
+
+.productDetails {
+    display: flex; /* Usa flexbox per allineare l'immagine e i dettagli del prodotto */
+    align-items: center; /* Allinea verticalmente al centro */
+}
+
+.productImage {
+    width: 80px; /* Imposta una larghezza per l'immagine */
+    height: auto; /* Mantieni le proporzioni */
+    margin-right: 15px; /* Spazio tra immagine e testo */
+}
+
+.textDetails {
+    flex-grow: 1; /* Permette al testo di occupare lo spazio disponibile */
+}
+
+.totalContainer {
+    margin-top: 20px;
+    font-weight: bold; /* Rende il totale più evidente */
+}

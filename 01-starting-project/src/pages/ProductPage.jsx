@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import classes from "../cssPages/Product.module.css";
 import React, { useState } from 'react';
 import { Carousel } from 'primereact/carousel';
@@ -7,16 +7,38 @@ import { Card } from 'primereact/card';
 import ioecri from "../Components/pantalone.jpg"
 import Popup from "../Components/Popup";
 import { InputNumber } from 'primereact/inputnumber';
+import { useCart } from '../GlobalContext/CartContext';
 
 
 function ProductPage() {
+
+    const { prodotto } = useParams();
+
     const [popupVisible, setPopupVisible] = useState(false);
+
+    const { addToCart } = useCart();
+    const [quantity, setQuantity] = useState(1);
+
+    //per ora che non ho le chiamate
+    const prodottoId = Number(prodotto);
+    console.log(prodottoId);
+    const nomeProdotto = "NOME PRODOTTO"; 
+    const prezzoProdotto = 50.00;
+    const image =ioecri;
+
     const openPopup = () => {
+        addToCart({
+            id: prodottoId,
+            name: nomeProdotto,
+            quantity: quantity,
+            price: prezzoProdotto,
+            imageUrl: image
+        });
         setPopupVisible(true);
         setTimeout(() => {setPopupVisible(false);}, 1000);
     };
 
-    const [quantity, setQuantity] = useState(1);
+   
 
     const marca = "ciao";
     const images = [
@@ -41,8 +63,8 @@ function ProductPage() {
                     </div>
                     
                         <div className={classes.headerContainer}>
-                            <h1 className={classes.productTitle}>NOME PRODOTTO</h1>
-                            <h1 className={classes.productPrice} > PREZZO PRODOTTO </h1>
+                            <h1 className={classes.productTitle}>{nomeProdotto}</h1>
+                            <h1 className={classes.productPrice} > €{prezzoProdotto.toFixed(2)}</h1>
                         </div>
                         <Link to={`/search/${marca}`} > {`${marca}`}</Link>
                         <p className={classes.productDescription}>

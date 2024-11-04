@@ -15,6 +15,8 @@ import 'primeicons/primeicons.css';
 import { AuthProvider } from "./GlobalContext/AuthContext";
 import { LoadingProvider } from "./GlobalContext/LoadingContext";
 import ErrorPage from "./pages/ErrorPage";
+import { CartProvider } from "./GlobalContext/CartContext";
+import OrdinaPage from "./pages/OrdinaPage";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,8 @@ const router = createBrowserRouter([
       {path:"search/:searchText", element: <Cerca/>},
       {path:"/catalog", element:<CatalogoPage/>},
       {path:"/product/:prodotto", element:<ProductPage/>},
-      {path:"admin/products", element:<AdminPage/>}
+      {path:"admin/products", element:<AdminPage/>},
+      {path:"/ordina", element: <OrdinaPage/>}
     ]
   }
 ]);
@@ -39,7 +42,9 @@ function App() {
     
     <AuthProvider>
       <LoadingProvider>
-        <RouterProvider router ={router}/>
+        <CartProvider>
+          <RouterProvider router ={router}/>
+        </CartProvider>
       </LoadingProvider>
     </AuthProvider>
 

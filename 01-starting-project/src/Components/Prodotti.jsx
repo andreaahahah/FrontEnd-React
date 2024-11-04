@@ -30,8 +30,8 @@ export default function Prodotti(){
         <div className={classes["products-grid"]}>
         {products.map((product) => (
             <div className={classes["product-item"]}>
-                <Link to= {`/product/${product.id}`} >
-                    <button   key={product.id}>
+                <Link to= {`/product/${product.id}`} key={product.id} >
+                    <button   >
                         <img src={product.image} alt={product.title} />
                         <div className={classes["product-info"]}>
                             <h3>{product.title}</h3>

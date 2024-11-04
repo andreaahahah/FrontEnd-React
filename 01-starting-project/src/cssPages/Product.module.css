@@ -70,29 +70,30 @@
   color: #333;
 }
 
+.buttonContainer {
+  display: flex;
+  justify-content: center; /* Centra gli elementi nel contenitore */
+  align-items: center; /* Allinea verticalmente */
+  gap: 10px; /* Spazio tra input e bottone */
+  flex-wrap: wrap; /* Permette agli elementi di andare a capo se necessario */
+}
+
+.quantityInput {
+  flex: 0 1 80px; /* La larghezza minima e la crescita dell'input */
+}
+
 .addToCartButton {
+  flex: 0 1 200px; /* Imposta una larghezza flessibile ma limitata */
+  padding: 10px 15px; /* Aggiungi padding per una buona altezza */
+  border-radius: 8px;
   background-color: #007bff;
   color: #fff;
   font-weight: bold;
   text-transform: uppercase;
-  width: 50%;
-  padding: 12px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin: 0 auto;
-}
-
-.buttonContainer {
-  display: flex;
-  text-align: center; /* Centra il contenuto all'interno del contenitore */
+  text-align: center;
 }
 
 .addToCartButton:hover {
   background-color: #0056b3;
 }
 
-.quantityInput {
-  width: 20px;
-  
-  
-}
