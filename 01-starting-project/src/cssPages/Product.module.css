@@ -83,9 +83,16 @@
 }
 
 .buttonContainer {
+  display: flex;
   text-align: center; /* Centra il contenuto all'interno del contenitore */
 }
 
 .addToCartButton:hover {
   background-color: #0056b3;
+}
+
+.quantityInput {
+  width: 20px;
+  
+  
 }

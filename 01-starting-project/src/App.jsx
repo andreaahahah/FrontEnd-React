@@ -14,11 +14,13 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { AuthProvider } from "./GlobalContext/AuthContext";
 import { LoadingProvider } from "./GlobalContext/LoadingContext";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path:"/",
     element: <RootLayout/>,
+    errorElement: <ErrorPage />,
     children: [
       {path: "/", element: <HomePage/>},
       {path:"/login", element :<LoginPage/>},
