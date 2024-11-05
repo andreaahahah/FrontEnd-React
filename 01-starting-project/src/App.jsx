@@ -17,6 +17,7 @@ import { LoadingProvider } from "./GlobalContext/LoadingContext";
 import ErrorPage from "./pages/ErrorPage";
 import { CartProvider } from "./GlobalContext/CartContext";
 import OrdinaPage from "./pages/OrdinaPage";
+import ConfermaOrdinePage from "./pages/ConfermaOrdinePage";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,11 @@ const router = createBrowserRouter([
       {path:"/catalog", element:<CatalogoPage/>},
       {path:"/product/:prodotto", element:<ProductPage/>},
       {path:"admin/products", element:<AdminPage/>},
-      {path:"/ordina", element: <OrdinaPage/>}
+      {path:"/ordina", element: <OrdinaPage/>,
+        children: [
+          { path: "conferma-ordine", element: <ConfermaOrdinePage /> }
+        ]
+      }
     ]
   }
 ]);

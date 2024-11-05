@@ -1,14 +1,27 @@
 //TODO deve essere autenticato per arrivare qui
 //fai una chiamata http per vedere sia gli indirizzi dell'utente sia i suoi metodi di pagamento 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 import classes from '../cssPages/OrderPage.module.css';
+import { useCart } from '../GlobalContext/CartContext';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export default function OrdinaPage(){
+
+    const { cartItems } = useCart();
+    const navigate = useNavigate();
+
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [selectedPayment, setSelectedPayment] = useState(null);
+
+    useEffect(() => {
+        // Se non ho prodotti nel carrello appena creo la pagina, lo mando sul carrello
+        if (cartItems.length === 0) {
+          navigate('/cart');
+        }
+      }, [cartItems, navigate]);
 
     const [newAddress, setNewAddress] = useState({
         nazione: '',
@@ -71,6 +84,12 @@ export default function OrdinaPage(){
         }
     };
 
+    const handleConferma = ()=>{
+        //non mi piace molto, devo scegliere
+        if (selectedAddress && selectedPayment) {
+            navigate('/ordina/conferma-ordine');
+        }
+    }
     return (
         <div className={classes.orderContainer}>
             <h2>Procedi all'Ordine</h2>
@@ -169,7 +188,9 @@ export default function OrdinaPage(){
                 </div>
             </section>
 
-            <Button label="Conferma Ordine" className={classes.confirmButton} />
+            <Button label="Conferma Ordine" className={classes.confirmButton} onClick={handleConferma} />
+            <Outlet/>
+            
         </div>
     );
 }
