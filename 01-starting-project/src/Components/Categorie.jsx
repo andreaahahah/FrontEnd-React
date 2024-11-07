@@ -1,46 +1,12 @@
 import React, { useState } from 'react';
 import { Carousel } from 'primereact/carousel';
 import { Tag } from 'primereact/tag';
-import ioecri from './pantalone.jpg';
+
 import classes from "../ComponentsCss/Categories.module.css"
 
 
 const initialProducts = [
-    {
-        id: 1,
-        name: 'Product 1',
-        image: ioecri,
-        price: 29.99,
-        
-    },
-    {
-        id: 2,
-        name: 'Product 2',
-        image: ioecri,
-        price: 19.99,
-        
-    },
-    {
-        id: 3,
-        name: 'Product 3',
-        image: ioecri,
-        price: 49.99,
-        
-    },
-    {
-        id: 4,
-        name: 'Product 4',
-        image: ioecri,
-        price: 39.99,
-        
-    },
-    {
-        id: 5,
-        name: 'Product 5',
-        image: ioecri,
-        price: 59.99,
-        
-    },
+    
     {
         id: 6,
         name: 'Product 6',

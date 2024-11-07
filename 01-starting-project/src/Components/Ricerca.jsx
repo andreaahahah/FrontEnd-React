@@ -31,7 +31,7 @@ export default function Ricerca({ testo }) {
                             Risultati per: <span style={{ fontWeight: 'normal' }}>{testo}</span>
                         </div>
                     </div>
-                    <Prodotti />
+                    <Prodotti searchText={testo}/>
                 </>)}
         </main>
     );

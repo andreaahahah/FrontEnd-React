@@ -9,7 +9,7 @@ function  HomePage(){
             </div>
             <h2>ESPLORA LA NOSTRA VETRINA</h2>
 
-            <Prodotti style={{ marginTop: '500px' }}/>
+            <Prodotti searchText="vetrina" style={{ marginTop: '500px' }}/>
             
             
             

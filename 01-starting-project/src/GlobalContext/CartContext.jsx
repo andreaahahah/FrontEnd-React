@@ -5,7 +5,7 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
 
-    // se c'erano gia prodotti li stengo, altrimenti è vuoto
+    // se c'erano gia prodotti li tengo, altrimenti è vuoto
     const [cartItems, setCartItems] = useState(() => {
         const savedCart = localStorage.getItem('cart');
         return savedCart ? JSON.parse(savedCart) : [];

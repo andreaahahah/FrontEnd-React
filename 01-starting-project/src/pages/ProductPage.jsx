@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Carousel } from 'primereact/carousel';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import ioecri from "../Components/pantalone.jpg"
+
 import Popup from "../Components/Popup";
 import { InputNumber } from 'primereact/inputnumber';
 import { useCart } from '../GlobalContext/CartContext';
@@ -24,7 +24,7 @@ function ProductPage() {
     console.log(prodottoId);
     const nomeProdotto = "NOME PRODOTTO"; 
     const prezzoProdotto = 50.00;
-    const image =ioecri;
+    
 
     const openPopup = () => {
         addToCart({
@@ -42,7 +42,7 @@ function ProductPage() {
 
     const marca = "ciao";
     const images = [
-        ioecri,
+       
         '/placeholder.svg?height=600&width=400',
         '/placeholder.svg?height=600&width=400',
         '/placeholder.svg?height=600&width=400'
