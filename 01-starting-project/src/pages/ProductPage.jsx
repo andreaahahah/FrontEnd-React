@@ -1,97 +1,113 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import classes from "../cssPages/Product.module.css";
 import React, { useState } from 'react';
 import { Carousel } from 'primereact/carousel';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-
 import Popup from "../Components/Popup";
 import { InputNumber } from 'primereact/inputnumber';
 import { useCart } from '../GlobalContext/CartContext';
+import axios from "axios";
 
 
 function ProductPage() {
+  const { prodotto } = useParams(); //prendo l'id del prodotto dal path così posso cercarlo
 
-    const { prodotto } = useParams();
+  const location = useLocation(); //prendo tutto il prodotto che mi è stato passato dalla pagina precedente
+  console.log(location.state);
+  const { product } = location.state || {};
 
-    const [popupVisible, setPopupVisible] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
 
-    const { addToCart } = useCart();
-    const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
 
-    //per ora che non ho le chiamate
-    const prodottoId = Number(prodotto);
-    console.log(prodottoId);
-    const nomeProdotto = "NOME PRODOTTO"; 
-    const prezzoProdotto = 50.00;
-    
+  if (!product) {
+    //fai la chiamata http che recupera il prodotto dall'id
+  }
 
-    const openPopup = () => {
-        addToCart({
-            id: prodottoId,
-            name: nomeProdotto,
-            quantity: quantity,
-            price: prezzoProdotto,
-            imageUrl: image
-        });
-        setPopupVisible(true);
-        setTimeout(() => {setPopupVisible(false);}, 1000);
-    };
+  //per ora che non ho le chiamate
+  const prodottoId = Number(prodotto);
 
-   
+  const { nome, prezzo, marca, descrizione, immagini } = product;
 
-    const marca = "ciao";
-    const images = [
-       
-        '/placeholder.svg?height=600&width=400',
-        '/placeholder.svg?height=600&width=400',
-        '/placeholder.svg?height=600&width=400'
-    ];
-      
-    const imageTemplate = (item) => {
-        return (
-            <img src={item} alt="Product" className={classes.productImage} />
-        );
-    };
+  const openPopup = () => {
+    addToCart({
+      id: prodottoId,
+      name: nome,
+      quantity: quantity,
+      price: prezzo,
+      imageUrl: immagini.split(",")[0],
+    });
+    setPopupVisible(true);
+    setTimeout(() => {
+      setPopupVisible(false);
+    }, 1000);
+  };
 
+  const imageTemplate = (item) => {
     return (
-        <div className={classes.container}>
-            <Card className={classes.productCard}>
-                <div className={classes.grid}>
-                    <div>
-                        <Carousel value={images} numVisible={1} numScroll={1} className={classes.carousel} itemTemplate={imageTemplate} />
-                    </div>
-                    
-                        <div className={classes.headerContainer}>
-                            <h1 className={classes.productTitle}>{nomeProdotto}</h1>
-                            <h1 className={classes.productPrice} > €{prezzoProdotto.toFixed(2)}</h1>
-                        </div>
-                        <Link to={`/search/${marca}`} > {`${marca}`}</Link>
-                        <p className={classes.productDescription}>
-                            DESCRIZIONE DI QUESTO BELLISSIMO PRODOTTO
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil exercitationem placeat quod fugiat consectetur illum harum earum accusamus corrupti. Maxime quis esse in dolor vero rem pariatur sapiente quod ratione!
-                        </p>
-                    <div className={classes.buttonContainer}>
-                    <InputNumber 
-                        value={quantity} 
-                        onValueChange={(e) => setQuantity(e.value)} 
-                        min={1} 
-                        max={10} 
-                        showButtons 
-                        className={classes.quantityInput}
-                    />   
-                        <Button label="Aggiungi al carrello" icon="pi pi-shopping-cart" className={classes.addToCartButton}  onClick={openPopup} />
-
-                        <Popup visible={popupVisible} onHide={() => setPopupVisible(false)}>
-
-                            {quantity>1? (<p> {quantity} prodotti aggiunti al carrello</p>) : (<p> {quantity} prodotto aggiunto al carrello</p>)}
-                        </Popup>
-
-                    </div>
-                </div>
-            </Card>
-        </div>
+      <img
+        src={`/images/${item}`}
+        alt="Product"
+        className={classes.productImage}
+      />
     );
+  };
+
+  return (
+    <div className={classes.container}>
+      <Card className={classes.productCard}>
+        <div>
+          {immagini && immagini.split(",").length > 0 && (
+            <Carousel
+              value={immagini.split(",")}
+              numVisible={1}
+              numScroll={1}
+              className={classes.carousel}
+              itemTemplate={imageTemplate}
+              autoplayInterval={5000}
+              circular 
+                 
+            />
+          )}
+
+          <div className={classes.headerContainer}>
+            <h1 className={classes.productTitle}>{nome}</h1>
+            <h1 className={classes.productPrice}> €{prezzo.toFixed(2)}</h1>
+          </div>
+          <Link to={`/search/${marca.nome}`}> {`${marca.nome}`}</Link>
+          <p className={classes.productDescription}>
+            {descrizione}
+          </p>
+          <div className={classes.buttonContainer}>
+            <InputNumber
+              value={quantity}
+              onValueChange={(e) => setQuantity(e.value)}
+              min={1}
+              max={10}
+              showButtons
+              className={classes.quantityInput}
+            />
+            <Button
+              label="Aggiungi al carrello"
+              icon="pi pi-shopping-cart"
+              className={classes.addToCartButton}
+              onClick={openPopup}
+            />
+
+            <Popup visible={popupVisible} onHide={() => setPopupVisible(false)}>
+              {quantity > 1 ? (
+                <p> {quantity} prodotti aggiunti al carrello</p>
+              ) : (
+                <p> {quantity} prodotto aggiunto al carrello</p>
+              )}
+            </Popup>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
 }
 
 export default ProductPage;

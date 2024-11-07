@@ -32,7 +32,6 @@ export default function Prodotti({ searchText }){
         fetchProducts();
     }, []);
 
-    console.log(products)
     
     return (
         <div className={classes["products-grid"]}>
@@ -40,9 +39,10 @@ export default function Prodotti({ searchText }){
             
             <div className={classes["product-item"]}>
                 
-                <Link to= {`/product/${product.id}`} key={product.id} >
+                <Link to={{ pathname: `/product/${product.id}` }} state={{ product }} key={product.id}>
+
                     <button   >
-                        <img src={`/images/${product.immagini}`} alt={product.nome} />
+                        <img src={`/images/${product.immagini.split(',')[0]}`} alt={product.nome} />
                         <div className={classes["product-info"]}>
                             <h3>{product.nome}</h3>
                             <p style={{ fontWeight: 'bold' }}>${Number(product.prezzo).toFixed(2)}</p>
