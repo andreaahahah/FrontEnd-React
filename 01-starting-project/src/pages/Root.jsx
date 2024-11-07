@@ -46,7 +46,7 @@ function RootLayout() {
 
           <button className={classes["icon-button"]} onClick={handleVisibile}>
             <img
-              src="src/images/magnifying-glass.png"
+              src="/images/magnifying-glass.png"
               alt="Icona lente di ingrandimento"
               className={classes["icon-image"]}
             />
@@ -55,7 +55,7 @@ function RootLayout() {
           <Link to="/profile">
             <button className={classes["icon-button"]}>
               <img
-                src="src/images/user.png"
+                src="/images/user.png"
                 alt="Icona profilo"
                 className={classes["icon-image"]}
               />
@@ -65,7 +65,7 @@ function RootLayout() {
           <Link to="/cart">
             <button className={classes["icon-button"]}>
               <img
-                src="src/images/grocery-store.png"
+                src="/images/grocery-store.png"
                 alt="Icona carrello"
                 className={classes["icon-image"]}
               />

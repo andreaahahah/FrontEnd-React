@@ -1,6 +1,6 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import classes from "../cssPages/Product.module.css";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Carousel } from 'primereact/carousel';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
@@ -14,22 +14,42 @@ function ProductPage() {
   const { prodotto } = useParams(); //prendo l'id del prodotto dal path così posso cercarlo
 
   const location = useLocation(); //prendo tutto il prodotto che mi è stato passato dalla pagina precedente
-  console.log(location.state);
-  const { product } = location.state || {};
 
+  const { product } = location.state || {};
+  console.log(product);
+  console.log(!product);
   const [popupVisible, setPopupVisible] = useState(false);
 
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [fetchedProduct, setFetchedProduct] = useState(null);
 
-  if (!product) {
-    //fai la chiamata http che recupera il prodotto dall'id
-  }
+ const prodottoId = Number(prodotto);
 
-  //per ora che non ho le chiamate
-  const prodottoId = Number(prodotto);
+  useEffect(() => {
+    if (!product) {
+        console.log("entro")
+        const fetchProduct = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/prodotto/getProdotto?prod=${prodottoId}`);
+                setFetchedProduct(response.data);
+            } catch (error) {
+                console.error("Errore nel recupero del prodotto:", error);
+            }
+        };
+        fetchProduct();
+    }
+    }, [prodotto, product]);
 
-  const { nome, prezzo, marca, descrizione, immagini } = product;
+    
+    const currentProduct = product || fetchedProduct;
+
+    if (!currentProduct) {
+        //gestisci il carimento
+        return <p>Caricamento prodotto...</p>;
+      }
+ 
+  const { nome, prezzo, marca, descrizione, immagini } = currentProduct;
 
   const openPopup = () => {
     addToCart({
