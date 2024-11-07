@@ -15,7 +15,7 @@ export default function Prodotti({ searchText }) {
     startLoading();
   };
 
-  const endLogin = () => {
+  const endLoading = () => {
     stopLoading();
   };
 
@@ -28,7 +28,7 @@ export default function Prodotti({ searchText }) {
             "http://localhost:8080/prodotto/elencaVetrina"
           );
           setProducts(response.data);
-          endLogin();
+          endLoading();
         } catch (error) {
           console.error("Errore nel recupero dei prodotti:", error);
         }
@@ -39,7 +39,7 @@ export default function Prodotti({ searchText }) {
             `http://localhost:8080/prodotto/getProdotti?prod=${searchText}`
           );
           setProducts(response.data);
-          endLogin();
+          endLoading();
         } catch (error) {
           console.error("Errore nel recupero dei prodotti:", error);
         }
