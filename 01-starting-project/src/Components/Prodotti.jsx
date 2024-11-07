@@ -21,8 +21,11 @@ export default function Prodotti({ searchText }){
             }
             else{
                 try {
-                    const response = await axios.get("http://localhost:8080/prodotto/elenca");
+                    console.log("ci siamo")
+                    const response = await axios.get(`http://localhost:8080/prodotto/getProdotti?prod=${searchText}`);
                     setProducts(response.data); 
+                    console.log(response)
+                    console.log("ci siamo2")
                 } catch (error) {
                     console.error("Errore nel recupero dei prodotti:", error);
                 }
