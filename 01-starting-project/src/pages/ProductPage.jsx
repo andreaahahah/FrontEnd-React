@@ -16,8 +16,7 @@ function ProductPage() {
   const location = useLocation(); //prendo tutto il prodotto che mi è stato passato dalla pagina precedente
 
   const { product } = location.state || {};
-  console.log(product);
-  console.log(!product);
+
   const [popupVisible, setPopupVisible] = useState(false);
 
   const { addToCart } = useCart();
@@ -28,10 +27,9 @@ function ProductPage() {
 
   useEffect(() => {
     if (!product) {
-        console.log("entro")
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/prodotto/getProdotto?prod=${prodottoId}`);
+                const response = await axios.get(`http://localhost:8081/prodotto/getProdotto?prod=${prodottoId}`);
                 setFetchedProduct(response.data);
             } catch (error) {
                 console.error("Errore nel recupero del prodotto:", error);
@@ -96,7 +94,12 @@ function ProductPage() {
             <h1 className={classes.productTitle}>{nome}</h1>
             <h1 className={classes.productPrice}> €{prezzo.toFixed(2)}</h1>
           </div>
-          <Link to={`/search/${marca.nome}`}> {`${marca.nome}`}</Link>
+          <Link 
+            to={`/search/${marca.nome}`}
+            state={{ tipo: "m", nome: marca.nome }}
+            key={marca.nome}
+          >
+             {`${marca.nome}`}</Link>
           <p className={classes.productDescription}>
             {descrizione}
           </p>

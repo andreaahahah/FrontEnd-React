@@ -3,7 +3,7 @@ import HomePage from "./pages/Home";
 import CartPage from "./pages/Cart";
 import ProfilePage from "./pages/ProfilePage";
 import RootLayout from "./pages/Root";
-import Cerca from "./pages/Cerca";
+
 import LoginPage from "./pages/LoginPage";
 import CatalogoPage from "./pages/CatalogoPage";
 import ProductPage from "./pages/ProductPage";
@@ -18,6 +18,7 @@ import ErrorPage from "./pages/ErrorPage";
 import { CartProvider } from "./GlobalContext/CartContext";
 import OrdinaPage from "./pages/OrdinaPage";
 import ConfermaOrdinePage from "./pages/ConfermaOrdinePage";
+import Ricerca from "./Components/Ricerca";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,9 @@ const router = createBrowserRouter([
       {path:"/signup", element:<SignUpPage/>},
       {path: "/cart", element: <CartPage/>},
       {path:"/profile", element: <ProfilePage/>},
-      {path:"search/:searchText", element: <Cerca/>},
+
+      {path:"search/:searchText", element: <Ricerca/>},
+
       {path:"/catalog", element:<CatalogoPage/>},
       {path:"/product/:prodotto", element:<ProductPage/>},
       {path:"admin/products", element:<AdminPage/>},

@@ -6,10 +6,11 @@ import spinnerStyles from "../ComponentsCss/Spinner.module.css";
 
 import axios from "axios";
 
-export default function Prodotti({ searchText }) {
+export default function Prodotti({ searchText, tipo }) {
   const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
 
   const [products, setProducts] = useState([]);
+  
 
   const handleLoading = () => {
     startLoading();
@@ -22,21 +23,46 @@ export default function Prodotti({ searchText }) {
   useEffect(() => {
     const fetchProducts = async () => {
       handleLoading();
+      
       if (searchText == "vetrina") {
         try {
           const response = await axios.get(
-            "http://localhost:8080/prodotto/elencaVetrina"
+            "http://localhost:8081/prodotto/elencaVetrina"
           );
           setProducts(response.data);
           endLoading();
         } catch (error) {
           console.error("Errore nel recupero dei prodotti:", error);
         }
-      } else {
+      } else if(tipo=="c"){
+        try {
+          const response = await axios.get(
+            `http://localhost:8081/prodottoCategoria/getProdotti?cate=${searchText}`
+          );
+          setProducts(response.data);
+          endLoading();
+        } catch (error) {
+          console.error("Errore nel recupero dei prodotti:", error);
+        }
+      }
+      else if(tipo=="m"){
+        try {
+          const response = await axios.get(
+            `http://localhost:8081/prodotto/elencaProdByMarca?marca=${searchText}`
+          );
+          
+          setProducts(response.data);
+          endLoading();
+        } catch (error) {
+          console.error("Errore nel recupero dei prodotti:", error);
+        }
+      }
+      
+      else{
         try {
           console.log(searchText);
           const response = await axios.get(
-            `http://localhost:8080/prodotto/getProdotti?prod=${searchText}`
+            `http://localhost:8081/prodotto/getProdotti?prod=${searchText}`
           );
           setProducts(response.data);
           endLoading();

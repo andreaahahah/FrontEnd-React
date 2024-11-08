@@ -5,6 +5,7 @@ import { Tag } from 'primereact/tag';
 import classes from "../ComponentsCss/Categories.module.css"
 import axios from 'axios';
 import { LoadingContext } from '../GlobalContext/LoadingContext';
+import { Link } from 'react-router-dom';
 
 
 
@@ -34,7 +35,8 @@ export default function Categorie() {
             handleLoading();
             try {
                 console.log("Recupero delle categorie in corso...");
-                const response = await axios.get("http://localhost:8080/prodottoCategoria/elenca");
+                const response = await axios.get("http://localhost:8081/prodottoCategoria/elenca");
+                //header autorization Bearer token
                 setCategorie(response.data);
             } catch (error) {
                 console.error("Errore nel recupero delle categorie:", error);
@@ -49,24 +51,34 @@ export default function Categorie() {
 
 
     const productTemplate = (categorie) => (
-        <div className="border-1 surface-border border-round m-2 text-center py-5 px-3 transition-transform transform hover:scale-105">
-            <button className={classes["cate-button"]}>
-            <div className="mb-3">
-                <img src={`/images/categorie/${categorie.descrizione}`} alt={categorie.nome} style={{ width: '150px', height: 'auto' }} className="w-6 shadow-2" />
+        
+        <Link
+            to={{ pathname: `/search/${categorie.nome}` }}
+            state={{ tipo: "c", nome: categorie.id_categoria }}
+            key={categorie.id_categoria}
             
-            </div>
-            <div>
-                <h4 className="mb-1">{categorie.nome}</h4>
+        >
+            <div className="border-1 surface-border border-round m-2 text-center py-5 px-3 transition-transform transform hover:scale-105">
+                <button className={classes["cate-button"]}>
+                <div className="mb-3">
+                    <img src={`/images/categorie/${categorie.descrizione}`} alt={categorie.nome} style={{ width: '150px', height: 'auto' }} className="w-6 shadow-2" />
                 
+                </div>
+                <div>
+                    <h4 className="mb-1">{categorie.nome}</h4>
+                    
+                </div>
+                </button>
             </div>
-            </button>
-        </div>
+        </Link>
+
     );
 
     //metti lo spinner quando cairca
     return (
         <div className="card">
             {categorie.length > 0 ? (
+
                 <div className={classes["carousel-container"]}> 
                 <Carousel 
                     value={categorie} 
@@ -79,6 +91,7 @@ export default function Categorie() {
                     itemTemplate={productTemplate} 
                 />
                 </div>
+
             ) : (
                 <div className="text-center py-5">
                     <h5>nessuna categoria</h5>
