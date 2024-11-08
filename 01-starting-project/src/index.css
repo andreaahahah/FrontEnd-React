@@ -60,16 +60,7 @@ header {
 }
 
 
-.modern-input {
-  width: 200px;
-  padding: 7px 15px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  background-color: white;
-  outline: none;
-  font-size: 14px;
 
-}
 
 .p-carousel .p-carousel-indicator {
   display: none;

@@ -1,0 +1,98 @@
+/* AdminPage.module.css */
+
+.adminContainer {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
+.adminContainer:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+input[type="text"], .p-inputtext, .p-inputnumber, .p-inputtextarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtextarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.15);
+    outline: none;
+}
+
+.p-inputtextarea {
+    resize: none;
+}
+
+.radioGroup {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1rem;
+}
+
+.radioGroup label {
+    color: #495057;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.p-radiobutton {
+    margin-right: 0.5rem;
+}
+
+.p-fileupload {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+}
+
+.saveButton {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 0.85rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.saveButton:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 86, 179, 0.4);
+}
+
+.saveButton:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 86, 179, 0.2);
+}

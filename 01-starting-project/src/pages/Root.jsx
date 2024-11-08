@@ -1,11 +1,13 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import classes from "../ComponentsCss/Icone.module.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../GlobalContext/AuthContext";
 
 function RootLayout() {
+  const { isAuthenticated, user, login, logout } = useContext(AuthContext);
   const [isVisible, setIsVisible] = useState(false);
   const [inputText, setInputText] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   function handleVisibile() {
     setIsVisible((isVisible) => !isVisible);
@@ -16,29 +18,34 @@ function RootLayout() {
   }
 
   function handleKeyDown(event) {
-    if (event.key === "Enter" && inputText !== "" ) {
+    if (event.key === "Enter" && inputText !== "") {
       handleVisibile();
       navigate(`/search/${inputText}`); //passo il testo cercato nel percorso
-      }
-    
+    }
   }
 
   return (
     <>
       <header>
-
-        <Link to="/" className="custom-link" >
-        {isVisible? handleVisibile: undefined}
-        <div className="header-content">
-          <h1 className="site-title">● STOCK HOUSE ●</h1>
-        </div>
+        <Link to="/" className="custom-link">
+          <div className="header-content">
+            <h1 className="site-title">● STOCK HOUSE ●</h1>
+          </div>
         </Link>
-        
+
         <div className={classes["button-container"]}>
+          {isAuthenticated && (
+            <Link to="/admin/products">
+              <button className={classes["custom-button"]}>
+                AGGIUNGI UN PRODOTTO
+              </button>
+            </Link>
+          )}
+
           {isVisible && (
             <input
               type="text"
-              className="modern-input"
+              className={classes["modern-input"]}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
             />
@@ -82,7 +89,6 @@ function RootLayout() {
 }
 
 export default RootLayout;
-
 
 //per la gestione dei problemi delle richieste http
 //metti uno spinner appena fai la richiesta, e gestisci i problemi ed eccezioni globalmente

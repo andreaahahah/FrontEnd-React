@@ -9,6 +9,7 @@ import CatalogoPage from "./pages/CatalogoPage";
 import ProductPage from "./pages/ProductPage";
 import AdminPage from "./pages/AdminPage";
 import SignUpPage from "./pages/SignUpPage";
+import ITuoiOrdini from "./pages/ITuoiOridniPage";
 import 'primereact/resources/themes/saga-blue/theme.css'; 
 import 'primereact/resources/primereact.min.css'; 
 import 'primeicons/primeicons.css';
@@ -31,12 +32,11 @@ const router = createBrowserRouter([
       {path:"/signup", element:<SignUpPage/>},
       {path: "/cart", element: <CartPage/>},
       {path:"/profile", element: <ProfilePage/>},
-
       {path:"search/:searchText", element: <Ricerca/>},
-
       {path:"/catalog", element:<CatalogoPage/>},
       {path:"/product/:prodotto", element:<ProductPage/>},
       {path:"admin/products", element:<AdminPage/>},
+      {path:"/iTuoiOrdini", element:<ITuoiOrdini/>},
       {path:"/ordina", element: <OrdinaPage/>,
         children: [
           { path: "conferma-ordine", element: <ConfermaOrdinePage /> }

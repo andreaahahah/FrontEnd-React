@@ -26,6 +26,11 @@ function  ProfilePage(){
                     <h3> {user?.email}</h3> 
                     <h3> {user?.surname}</h3>
                     <h3> {user?.password}</h3>{/**solo per debug */}
+                    <div className={classes["buttons-container"]}>
+                        <Link to="/iTuoiOrdini">
+                            <button className={classes["login-btn"]}>I TUOI ORDINI</button>
+                        </Link>
+                    </div>
 
                 </div>
             ):(

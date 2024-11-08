@@ -3,6 +3,17 @@
   justify-content: flex-end; 
   align-items: center;
 }
+.modern-input {
+  width: 100%;
+  max-width: 230px; /* Larghezza massima */
+  min-width: 130px; /* Larghezza minima */
+  padding: 7px 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: white;
+  outline: none;
+  font-size: 14px;
+}
 
 .icon-button {
   background: none;
@@ -30,4 +41,39 @@
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+
+.site-title {
+  margin: 0;
+  font-size: 24px;
+  color: white;
+}
+
+.custom-button {
+  background-color: #007BFF; /* Colore blu */
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 20px; /* Distanza tra titolo e bottone */
+}
+
+.custom-button:hover {
+  background-color: #0069d9; /* Blu più scuro per hover */
+  transform: scale(1.05);
+}
+
+.custom-button:active {
+  background-color: #0056b3; /* Blu ancora più scuro per stato attivo */
+  transform: scale(1);
+}
+
+.custom-button:focus {
+  outline: none;
+  box-shadow: 0 0 4px #007BFF;
 }
