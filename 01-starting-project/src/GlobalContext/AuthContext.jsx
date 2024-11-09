@@ -1,26 +1,56 @@
-import React, { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from "react";
+import Keycloak from "keycloak-js";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState(null); //forse serve, così mi memorizzo i dati dell'utente
-  
-   
-    const login = (userData) => {
-      setIsAuthenticated(true);
-      setUser(userData); 
-    };
-  
-    
-    const logout = () => {
-      setIsAuthenticated(false);
-      setUser(null); 
-    };
-  
-    return (
-      <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
-        {children}
-      </AuthContext.Provider>
-    );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [userRoles, setUserRoles] = useState([]); // Stato per i ruoli dell'utente
+  const [keycloak, setKeycloak] = useState(null);
+
+  useEffect(() => {
+    const keycloakInstance = new Keycloak({
+      url: "http://localhost:8080/",
+      realm: "piattaforme",
+      clientId: "my-frontend"
+    });
+
+    keycloakInstance.init({
+      onLoad: "check-sso",
+      redirectUri: window.location.href,
+    }).then(authenticated => {
+      if (authenticated) {
+        setIsAuthenticated(true);
+        setUser(keycloakInstance.tokenParsed);
+        
+        // Ottieni i ruoli dal token JWT
+        const roles = keycloakInstance.tokenParsed?.realm_access?.roles || [];
+        setUserRoles(roles); // Salva i ruoli dell'utente nello stato
+      } else {
+        console.log("User not authenticated");
+      }
+    }).catch(error => {
+      console.log("Error during Keycloak initialization", error);
+    });
+
+    setKeycloak(keycloakInstance);
+  }, []);
+
+  const login = () => {
+    keycloak?.login();
   };
+
+  const logout = () => {
+    keycloak?.logout();
+    setIsAuthenticated(false);
+    setUser(null);
+    setUserRoles([]);
+  };
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, user, userRoles, login, logout, keycloak }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../GlobalContext/AuthContext";
 
 function RootLayout() {
-  const { isAuthenticated, user, login, logout } = useContext(AuthContext);
+  const { isAuthenticated, user, login, logout, userRoles } = useContext(AuthContext);
   const [isVisible, setIsVisible] = useState(false);
   const [inputText, setInputText] = useState("");
   const navigate = useNavigate();
@@ -34,7 +34,8 @@ function RootLayout() {
         </Link>
 
         <div className={classes["button-container"]}>
-          {isAuthenticated && (
+          
+          {isAuthenticated && userRoles.includes("SuperAdmin")&& (
             <Link to="/admin/products">
               <button className={classes["custom-button"]}>
                 AGGIUNGI UN PRODOTTO

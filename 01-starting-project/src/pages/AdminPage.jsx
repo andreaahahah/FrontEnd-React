@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -7,8 +8,18 @@ import { RadioButton } from 'primereact/radiobutton';
 import { FileUpload } from 'primereact/fileupload';
 import classes from '../cssPages/AdminPage.module.css';
 import axios from 'axios';
+import { AuthContext } from '../GlobalContext/AuthContext';
 
 export default function AdminPage() {
+    const { isAuthenticated, userRoles } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isAuthenticated || !userRoles.includes("SuperAdmin")) {
+            navigate('/'); // Reindirizza alla home page
+        }
+    }, [isAuthenticated, userRoles, navigate]);
+
     const [productData, setProductData] = useState({
         nome: '',
         descrizione: '',
@@ -56,6 +67,8 @@ export default function AdminPage() {
     };
 
     return (
+        <>
+        {(isAuthenticated && userRoles.includes("SuperAdmin")) ? (
         <div className={classes.adminContainer}>
             <h2>Carica Nuovo Prodotto</h2>
             <div className={classes.formGroup}>
@@ -120,6 +133,7 @@ export default function AdminPage() {
                 />
             </div>
             <Button label="Salva Prodotto" onClick={console.log("okay")} className={classes.saveButton} />
-        </div>
+        </div>):(null)}
+        </>
     );
 }
