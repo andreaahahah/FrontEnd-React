@@ -8,13 +8,17 @@ export default function iTuoiOrdini() {
   const makeRequest = async () => {
     try {
       const token = keycloak?.token; // Ottieni il token JWT
-
-      const response = await axios.get(`http://localhost:8081/solotoken`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Aggiungi il token nell'intestazione
-        },
-      });
-
+  
+      const response = await axios.post(
+        `http://localhost:8081/prodotto/crea?p=39&q=10&m=levis&n=pantalone&d=pantalone%20jeans%20uomo%20perfetto%20per%20l'%20inverbo&img=path/image&c=pantaloni%20uomo`,
+        {}, // Invia un payload vuoto se non hai bisogno di altri dati nel corpo della richiesta
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Aggiungi il token nell'intestazione
+          },
+        }
+      );
+  
       console.log(response.data); // Gestisci la risposta
     } catch (error) {
       console.error('Error making request:', error);

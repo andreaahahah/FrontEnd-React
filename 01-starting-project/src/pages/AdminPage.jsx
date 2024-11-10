@@ -11,7 +11,8 @@ import axios from 'axios';
 import { AuthContext } from '../GlobalContext/AuthContext';
 
 export default function AdminPage() {
-    const { isAuthenticated, userRoles } = useContext(AuthContext);
+    const { isAuthenticated, userRoles, keycloak} = useContext(AuthContext);
+    
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +28,8 @@ export default function AdminPage() {
         marca: '',
         quantita: null,
         vetrina: false,
-        immagini: ''
+        immagini: '',
+        categoria: '' // Aggiunto il campo categoria
     });
 
     const handleInputChange = (e) => {
@@ -48,8 +50,17 @@ export default function AdminPage() {
     };
 
     const handleSaveProduct = async () => {
+        const descrizionePronta = encodeURIComponent(productData.descrizione);
+        const token = keycloak?.token;
         try {
-            await axios.post('/api/prodotti', productData);
+            await axios.post(`http://localhost:8081/prodotto/crea?p=${productData.prezzo}&q=${productData.quantita}&m=${productData.marca}&n=${productData.nome}&d=${descrizionePronta}&img="productData.immagini"&c=${productData.categoria}&v=${productData.vetrina}`,
+                {}, // Invia un payload vuoto se non hai bisogno di altri dati nel corpo della richiesta
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Aggiungi il token nell'intestazione
+          },
+        }
+            );
             // Reset the form after submission
             setProductData({
                 nome: '',
@@ -58,7 +69,8 @@ export default function AdminPage() {
                 marca: '',
                 quantita: null,
                 vetrina: false,
-                immagini: ''
+                immagini: '',
+                categoria: '' // Reset categoria
             });
             alert('Prodotto aggiunto con successo!');
         } catch (error) {
@@ -105,6 +117,13 @@ export default function AdminPage() {
                     value={productData.quantita} 
                     onValueChange={(e) => setProductData(prevData => ({ ...prevData, quantita: e.value }))} 
                 />
+                {/* Campo Categoria */}
+                <InputText 
+                    name="categoria" 
+                    placeholder="Categoria" 
+                    value={productData.categoria} 
+                    onChange={handleInputChange} 
+                />
                 <div className={classes.radioGroup}>
                     <label>In Vetrina:</label>
                     <RadioButton 
@@ -132,8 +151,8 @@ export default function AdminPage() {
                     onUpload={handleFileUpload} 
                 />
             </div>
-            <Button label="Salva Prodotto" onClick={console.log("okay")} className={classes.saveButton} />
-        </div>):(null)}
+            <Button label="Salva Prodotto" onClick={handleSaveProduct} className={classes.saveButton} />
+        </div>) : (null)}
         </>
     );
 }
