@@ -9,11 +9,10 @@ import { InputNumber } from 'primereact/inputnumber';
 import { useCart } from '../GlobalContext/CartContext';
 import axios from "axios";
 
-
 function ProductPage() {
-  const { prodotto } = useParams(); //prendo l'id del prodotto dal path così posso cercarlo
+  const { prodotto } = useParams(); // prendo l'id del prodotto dal path così posso cercarlo
 
-  const location = useLocation(); //prendo tutto il prodotto che mi è stato passato dalla pagina precedente
+  const location = useLocation(); // prendo tutto il prodotto che mi è stato passato dalla pagina precedente
 
   const { product } = location.state || {};
 
@@ -23,30 +22,33 @@ function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [fetchedProduct, setFetchedProduct] = useState(null);
 
- const prodottoId = Number(prodotto);
+  const prodottoId = Number(prodotto);
 
   useEffect(() => {
     if (!product) {
         const fetchProduct = async () => {
             try {
                 const response = await axios.get(`http://localhost:8081/prodotto/getProdotto?prod=${prodottoId}`);
-                setFetchedProduct(response.data);
+                
+                // Decodifica le immagini Base64 e aggiungile all'oggetto prodotto
+                const images = response.data.immagini.split(",").map(image => `data:image/jpeg;base64,${image}`);
+                
+                setFetchedProduct({ ...response.data, immagini: images });
             } catch (error) {
                 console.error("Errore nel recupero del prodotto:", error);
             }
         };
         fetchProduct();
     }
-    }, [prodotto, product]);
+  }, [prodotto, product]);
 
-    
-    const currentProduct = product || fetchedProduct;
+  const currentProduct = product || fetchedProduct;
 
-    if (!currentProduct) {
-        //gestisci il carimento
-        return <p>Caricamento prodotto...</p>;
-      }
- 
+  if (!currentProduct) {
+    // gestisci il caricamento
+    return <p>Caricamento prodotto...</p>;
+  }
+
   const { nome, prezzo, marca, descrizione, immagini } = currentProduct;
 
   const openPopup = () => {
@@ -55,7 +57,7 @@ function ProductPage() {
       name: nome,
       quantity: quantity,
       price: prezzo,
-      imageUrl: immagini.split(",")[0],
+      imageUrl: immagini[0], // Usa la prima immagine decodificata
     });
     setPopupVisible(true);
     setTimeout(() => {
@@ -66,7 +68,7 @@ function ProductPage() {
   const imageTemplate = (item) => {
     return (
       <img
-        src={`/images/${item}`}
+        src={item} // Ogni immagine è già decodificata
         alt="Product"
         className={classes.productImage}
       />
@@ -77,16 +79,15 @@ function ProductPage() {
     <div className={classes.container}>
       <Card className={classes.productCard}>
         <div>
-          {immagini && immagini.split(",").length > 0 && (
+          {immagini.length > 0 && (
             <Carousel
-              value={immagini.split(",")}
+              value={immagini}
               numVisible={1}
               numScroll={1}
               className={classes.carousel}
               itemTemplate={imageTemplate}
               autoplayInterval={5000}
-              circular 
-                 
+              circular
             />
           )}
 
@@ -99,7 +100,8 @@ function ProductPage() {
             state={{ tipo: "m", nome: marca.nome }}
             key={marca.nome}
           >
-             {`${marca.nome}`}</Link>
+            {`${marca.nome}`}
+          </Link>
           <p className={classes.productDescription}>
             {descrizione}
           </p>
@@ -108,7 +110,7 @@ function ProductPage() {
               value={quantity}
               onValueChange={(e) => setQuantity(e.value)}
               min={1}
-              max={10}
+              max={9}
               showButtons
               className={classes.quantityInput}
             />

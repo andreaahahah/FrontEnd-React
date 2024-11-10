@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import classes from "../ComponentsCss/Ricerca.module.css";
 import { LoadingContext } from "../GlobalContext/LoadingContext";
 import spinnerStyles from "../ComponentsCss/Spinner.module.css";
-
 import axios from "axios";
 
 export default function Prodotti({ searchText, tipo }) {
@@ -11,7 +10,6 @@ export default function Prodotti({ searchText, tipo }) {
 
   const [products, setProducts] = useState([]);
   
-
   const handleLoading = () => {
     startLoading();
   };
@@ -24,56 +22,35 @@ export default function Prodotti({ searchText, tipo }) {
     const fetchProducts = async () => {
       handleLoading();
       
-      if (searchText == "vetrina") {
-        try {
-          const response = await axios.get(
-            "http://localhost:8081/prodotto/elencaVetrina"
-          );
-          setProducts(response.data);
-          endLoading();
-        } catch (error) {
-          console.error("Errore nel recupero dei prodotti:", error);
+      try {
+        let response;
+        
+        if (searchText === "vetrina") {
+          response = await axios.get("http://localhost:8081/prodotto/elencaVetrina");
+        } else if (tipo === "c") {
+          response = await axios.get(`http://localhost:8081/prodottoCategoria/getProdotti?cate=${searchText}`);
+        } else if (tipo === "m") {
+          response = await axios.get(`http://localhost:8081/prodotto/elencaProdByMarca?marca=${searchText}`);
+        } else {
+          response = await axios.get(`http://localhost:8081/prodotto/getProdotti?prod=${searchText}`);
         }
-      } else if(tipo=="c"){
-        try {
-          const response = await axios.get(
-            `http://localhost:8081/prodottoCategoria/getProdotti?cate=${searchText}`
-          );
-          setProducts(response.data);
-          endLoading();
-        } catch (error) {
-          console.error("Errore nel recupero dei prodotti:", error);
-        }
-      }
-      else if(tipo=="m"){
-        try {
-          const response = await axios.get(
-            `http://localhost:8081/prodotto/elencaProdByMarca?marca=${searchText}`
-          );
-          
-          setProducts(response.data);
-          endLoading();
-        } catch (error) {
-          console.error("Errore nel recupero dei prodotti:", error);
-        }
-      }
-      
-      else{
-        try {
-          console.log(searchText);
-          const response = await axios.get(
-            `http://localhost:8081/prodotto/getProdotti?prod=${searchText}`
-          );
-          setProducts(response.data);
-          endLoading();
-        } catch (error) {
-          console.error("Errore nel recupero dei prodotti:", error);
-        }
+
+        const productsWithImages = response.data.map(product => {
+          // Decodifica le immagini Base64 e aggiungile all'oggetto prodotto
+          const images = product.immagini.split(",").map(image => `data:image/jpeg;base64,${image}`);
+          return { ...product, immagini: images };
+        });
+
+        setProducts(productsWithImages);
+        endLoading();
+      } catch (error) {
+        console.error("Errore nel recupero dei prodotti:", error);
+        endLoading();
       }
     };
 
     fetchProducts();
-  }, [searchText]);
+  }, [searchText, tipo]);
 
   return (
     <main className={isLoading ? spinnerStyles.blurred : ""}>
@@ -86,15 +63,11 @@ export default function Prodotti({ searchText, tipo }) {
       {!isLoading && (
         <div className={classes["products-grid"]}>
           {products.map((product) => (
-            <div className={classes["product-item"]}>
-              <Link
-                to={{ pathname: `/product/${product.id}` }}
-                state={{ product }}
-                key={product.id}
-              >
+            <div className={classes["product-item"]} key={product.id}>
+              <Link to={{ pathname: `/product/${product.id}` }} state={{ product }}>
                 <button>
                   <img
-                    src={`/images/${product.immagini.split(",")[0]}`}
+                    src={product.immagini[0]} // Usa la prima immagine decodificata
                     alt={product.nome}
                   />
                   <div className={classes["product-info"]}>
@@ -107,14 +80,12 @@ export default function Prodotti({ searchText, tipo }) {
               </Link>
             </div>
           ))}
-          
         </div>
-        
       )}
-        {!isLoading && products.length<=0 &&
-          <div className={classes["noRes"]}>La ricerca non ha prodotto alcun resultato</div>
-          }
 
+      {!isLoading && products.length <= 0 && (
+        <div className={classes["noRes"]}>La ricerca non ha prodotto alcun risultato</div>
+      )}
     </main>
   );
 }
