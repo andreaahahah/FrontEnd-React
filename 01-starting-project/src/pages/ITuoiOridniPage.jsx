@@ -1,38 +1,68 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button } from 'primereact/button';
 import axios from 'axios';
-import { AuthContext } from '../GlobalContext/AuthContext'; // Assicurati che il contesto sia importato
+import classes from '../cssPages/OrdersPage.module.css';
+import { AuthContext } from '../GlobalContext/AuthContext';
 
-export default function iTuoiOrdini() {
-  const { keycloak } = useContext(AuthContext);
+export default function ITuoiOrdini() {
+    const { keycloak } = useContext(AuthContext);
+    const [orders, setOrders] = useState([]);
+    const [sortedByDate, setSortedByDate] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false); // Stato per evitare loop infiniti
+    const token = keycloak?.token;
+    const authHeader = { headers: { Authorization: `Bearer ${token}` } };
 
-  const makeRequest = async () => {
-    try {
-      const token = keycloak?.token; // Ottieni il token JWT
+    useEffect(() => {
+        // Recupera gli ordini dal backend
+        axios.get('http://localhost:8081/utente/ordini', authHeader)
+            .then(response => {
+                // Ordina gli ordini dal più recente al più vecchio
+                const sortedOrders = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
+                setOrders(sortedOrders);
+                setIsLoaded(true); // Segnala che i dati sono stati caricati
+            })
+            .catch(error => {
+                console.error("Errore nel caricamento degli ordini:", error);
+                setIsLoaded(true); // In caso di errore, comunque segna il caricamento come completo
+            });
+    }, [token]); // Dipende dal token, quindi verrà rieseguito solo se cambia
+
+    const handleSort = () => {
+      if (orders.length === 0) return;
   
-      const response = await axios.post(
-        `http://localhost:8081/prodotto/crea?p=39&q=10&m=levis&n=pantalone&d=pantalone%20jeans%20uomo%20perfetto%20per%20l'%20inverbo&img=path/image&c=pantaloni%20uomo`,
-        {}, // Invia un payload vuoto se non hai bisogno di altri dati nel corpo della richiesta
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Aggiungi il token nell'intestazione
-          },
-        }
-      );
+      // Crea una copia dell'array e ordina per data
+      const sortedOrders = [...orders].sort((a, b) => {
+          const dateA = new Date(a.data).getTime(); // Conversione in timestamp
+          const dateB = new Date(b.data).getTime();
+          return !sortedByDate ? dateB - dateA : dateA - dateB;
+      });
   
-      console.log(response.data); // Gestisci la risposta
-    } catch (error) {
-      console.error('Error making request:', error);
-    }
+      setOrders(sortedOrders);
+      setSortedByDate(!sortedByDate);
   };
-
-  // Chiamare makeRequest quando il componente è montato
-  useEffect(() => {
-    makeRequest();
-  }, [keycloak]); // Effettua la richiesta solo quando keycloak è disponibile
-
-  return (
-    <div>
-      QUI CI SONO I TUOI ORDINI
-    </div>
-  );
+  
+    return (
+        <div className={classes.ordersContainer}>
+            <h2>I tuoi Ordini</h2>
+            <Button label={`Ordina per data (${sortedByDate ? 'Recenti' : 'Meno Recenti'})`} onClick={handleSort} className={classes.sortButton} />
+            {!isLoaded ? (
+                <p>Caricamento ordini...</p>
+            ) : orders.length === 0 ? (
+                <p>Non hai ancora effettuato ordini.</p>
+            ) : (
+                <ul>
+                    {orders.map((order) => (
+                        <li key={order.idOrdine} className={classes.orderItem}>
+                            <div className={classes.orderDetails}>
+                                <p><strong>Data:</strong> {new Date(order.data).toLocaleDateString()}</p>
+                                <p><strong>Totale:</strong> {order.totale}€</p>
+                                <p><strong>Indirizzo di Spedizione:</strong> {order.idIndirizzo ? `${order.idIndirizzo.via}, ${order.idIndirizzo.città}, ${order.idIndirizzo.cap}, ${order.idIndirizzo.nazione}` : 'Indirizzo non disponibile'}</p>
+                                <p><strong>Metodo di Pagamento:</strong> {order.idPagamento ? `${order.idPagamento.tipoCarta} - ${order.idPagamento.nomeCarta}` : 'Metodo di pagamento non disponibile'}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
 }

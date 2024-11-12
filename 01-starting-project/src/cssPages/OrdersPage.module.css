@@ -1,0 +1,72 @@
+/* OrdersPage.module.css */
+
+.ordersContainer {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.ordersContainer h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.sortButton {
+    display: block;
+    margin: 0 auto 20px auto;
+    font-size: 1rem;
+    padding: 10px 20px;
+    background-color: #007ad9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sortButton:hover {
+    background-color: #005fa3;
+}
+
+.orderItem {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.orderDetails p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.orderDetails p strong {
+    font-weight: bold;
+}
+
+.orderDetails p {
+    color: #333;
+}
+
+.orderDetails {
+    padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .ordersContainer {
+        padding: 15px;
+    }
+
+    .ordersContainer h2 {
+        font-size: 1.5rem;
+    }
+
+    .sortButton {
+        width: 100%;
+    }
+
+    .orderItem {
+        margin: 10px 0;
+        padding: 10px;
+    }
+}

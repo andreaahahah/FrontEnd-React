@@ -81,6 +81,7 @@ function ProductPage() {
         <div>
           {immagini.length > 0 && (
             <Carousel
+              key={immagini.join()}
               value={immagini}
               numVisible={1}
               numScroll={1}

@@ -23,12 +23,12 @@ export default function AdminPage() {
     const [productData, setProductData] = useState({
         nome: '',
         descrizione: '',
-        prezzo: null,
+        prezzo: 0,
         marca: '',
-        quantita: null,
+        quantita: 0,
         vetrina: false,
         immagini: [],
-        categoria: '' // Aggiunto il campo categoria
+        categoria: ''
     });
 
     const handleInputChange = (e) => {
@@ -50,56 +50,49 @@ export default function AdminPage() {
     };
 
     const handleSaveProduct = async () => {
-        // Crea un oggetto FormData per inviare solo le immagini
-        const formData = new FormData();
-    
-        // Aggiungi le immagini al FormData
-        if (productData.immagini.length > 0) {
-            productData.immagini.forEach((file, index) => {
-                formData.append("files", file);
-            });
-        } else {
-            console.error("Nessuna immagine selezionata.");
+        // Verifica che i campi obbligatori siano compilati
+        if (!productData.nome || !productData.descrizione || productData.prezzo <= 0 || !productData.marca || productData.quantita <= 0 || !productData.categoria || productData.immagini.length === 0) {
+            alert("Compila tutti i campi obbligatori e aggiungi almeno un'immagine.");
             return;
         }
-    
-        // Prepara i parametri nel path o come query
+
+        const formData = new FormData();
+        productData.immagini.forEach((file) => {
+            formData.append("files", file);
+        });
+
         const params = `p=${productData.prezzo}&q=${productData.quantita}&m=${productData.marca}&n=${productData.nome}&d=${productData.descrizione}&c=${productData.categoria}&v=${productData.vetrina}`;
-    
         const token = keycloak?.token;
-    
+
         try {
-            // Aggiungi i parametri al path URL
             const response = await axios.post(`http://localhost:8081/prodotto/crea?${params}`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
-    
-            if (response.status === 200) {
+
+            if (response.status >= 200 && response.status < 300) {
                 alert('Prodotto aggiunto con successo!');
-                // Reset del form dopo il salvataggio
                 setProductData({
                     nome: '',
                     descrizione: '',
-                    prezzo: null,
+                    prezzo: 0,
                     marca: '',
-                    quantita: null,
+                    quantita: 0,
                     vetrina: false,
                     immagini: [],
                     categoria: ''
                 });
             } else {
-                console.error("Errore nella risposta del server:", response);
                 alert("Si è verificato un errore durante il salvataggio del prodotto.");
+                console.error("Errore nella risposta del server:", response);
             }
         } catch (error) {
             console.error('Errore durante il salvataggio del prodotto:', error);
             alert("Errore durante il salvataggio del prodotto.");
         }
     };
-    
 
     return (
         <>
@@ -166,7 +159,6 @@ export default function AdminPage() {
                         <FileUpload
                             name="immagini"
                             multiple
-                            customUpload
                             auto
                             accept="image/*"
                             maxFileSize={1000000}

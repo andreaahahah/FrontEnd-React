@@ -1,100 +1,139 @@
-//TODO deve essere autenticato per arrivare qui
-//fai una chiamata http per vedere sia gli indirizzi dell'utente sia i suoi metodi di pagamento 
-
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
+import axios from 'axios';
 import classes from '../cssPages/OrderPage.module.css';
 import { useCart } from '../GlobalContext/CartContext';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../GlobalContext/AuthContext';
 
-export default function OrdinaPage(){
-
+export default function OrdinaPage() {
+    const { keycloak } = useContext(AuthContext);
     const { cartItems } = useCart();
     const navigate = useNavigate();
-
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [selectedPayment, setSelectedPayment] = useState(null);
+    const [addresses, setAddresses] = useState([]);
+    const [payments, setPayments] = useState([]);
+    
+    const token = keycloak?.token;
+    const authHeader = { headers: { Authorization: `Bearer ${token}` } };
 
     useEffect(() => {
-        // Se non ho prodotti nel carrello appena creo la pagina, lo mando sul carrello
         if (cartItems.length === 0) {
-          navigate('/cart');
+            navigate('/cart');
         }
-      }, [cartItems, navigate]);
+        
+        // Carica indirizzi e metodi di pagamento dal backend
+        axios.get(`http://localhost:8081/utente/getIndirizzo`, authHeader)
+            .then(response => {
+                setAddresses(response.data);
+                console.log("Indirizzi caricati:", response.data);
+            })
+            .catch(error => console.error("Errore nel caricamento degli indirizzi:", error));
+
+        axios.get(`http://localhost:8081/utente/getPagamento`, authHeader)
+            .then(response => {
+                setPayments(response.data);
+                console.log("Pagamenti caricati:", response.data);
+            })
+            .catch(error => console.error("Errore nel caricamento dei pagamenti:", error));
+    }, [cartItems, navigate]);
 
     const [newAddress, setNewAddress] = useState({
         nazione: '',
         cap: '',
-        citta: '',
+        città: '',
         via: '',
     });
 
     const [newPayment, setNewPayment] = useState({
         numeroCarta: '',
         nomeCarta: '',
-        scadenza: '',
+        meseScadenza: '',
+        annoScadenza: '',
         tipoCarta: '',
     });
-    
-    const [addresses, setAddresses] = useState([
-        {
-            id: 1,
-            nazione: 'Italia',
-            cap: '20100',
-            citta: 'Milano',
-            via: 'Via Roma 1',
-        },
-        {
-            id: 2,
-            nazione: 'Italia',
-            cap: '10100',
-            citta: 'Torino',
-            via: 'Corso Venezia 45',
-        },
-    ]);
-
-    const [payments, setPayments] = useState([
-        { id: 1, numeroCarta: '**** **** **** 1234', nomeCarta: 'Mario Rossi', scadenza: '12/25', tipoCarta: 'Visa' },
-        { id: 2, numeroCarta: '**** **** **** 5678', nomeCarta: 'Giulia Verdi', scadenza: '11/24', tipoCarta: 'MasterCard' },
-    ]);
 
     const handleAddressSelection = (addressId) => setSelectedAddress(addressId);
     const handlePaymentSelection = (paymentId) => setSelectedPayment(paymentId);
 
     const handleAddNewAddress = () => {
-        //il controllo che non esiste già lo faccio nel backend
-        if (newAddress.nazione && newAddress.cap && newAddress.citta && newAddress.via) {
-            const newAddressObj = { ...newAddress, id: Date.now() };
-            setAddresses([...addresses, newAddressObj]);
-            setNewAddress({ nazione: '', cap: '', citta: '', via: '' }); // resetto le caselle di input
+        if (newAddress.nazione && newAddress.cap && newAddress.città && newAddress.via) {
+            axios.post(
+                `http://localhost:8081/utente/addIndirizzo`,
+                {},
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: {
+                        via: newAddress.via,
+                        citta: newAddress.città,
+                        cap: newAddress.cap,
+                        nazione: newAddress.nazione
+                    }
+                }
+            )
+            .then(() => {
+                setAddresses(prevAddresses => [
+                    ...prevAddresses,
+                    {
+                        id: Date.now(),  // ID temporaneo
+                        ...newAddress   // Dati dell'indirizzo inseriti dall'utente
+                    }
+                ]);
+                setNewAddress({ nazione: '', cap: '', città: '', via: '' });
+            })
+            .catch(error => console.error("Errore nell'aggiunta dell'indirizzo:", error));
         }
     };
 
     const handleAddNewPayment = () => {
-        //il controllo che non esiste già lo faccio nel backend
-        if (newPayment.numeroCarta && newPayment.nomeCarta && newPayment.scadenza && newPayment.tipoCarta) {
-            const newPaymentObj = { 
-                ...newPayment, 
-                id: Date.now(),
-                numeroCarta: `**** **** **** ${newPayment.numeroCarta.slice(-4)}` // Maschera il numero della carta
-            };
-            setPayments([...payments, newPaymentObj]);
-            setNewPayment({ numeroCarta: '', nomeCarta: '', scadenza: '', tipoCarta: '' }); // resetto le caselle di input
+        const { numeroCarta, nomeCarta, meseScadenza, annoScadenza, tipoCarta } = newPayment;
+        
+        if (numeroCarta && nomeCarta && meseScadenza && annoScadenza && tipoCarta) {
+            const dataScadenza = `${annoScadenza}-${meseScadenza.padStart(2, '0')}-01`;
+
+            axios.post(
+                `http://localhost:8081/utente/addPagamento`,
+                {},
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: {
+                        n: numeroCarta,
+                        data: dataScadenza,
+                        tipo: tipoCarta,
+                        nome: nomeCarta
+                    }
+                }
+            )
+            .then(() => {
+                setPayments(prevPayments => [
+                    ...prevPayments,
+                    {
+                        id: Date.now(),  // ID temporaneo
+                        numeroCarta,
+                        nomeCarta,
+                        dataScadenza,
+                        tipoCarta
+                    }
+                ]);
+                setNewPayment({ numeroCarta: '', nomeCarta: '', meseScadenza: '', annoScadenza: '', tipoCarta: '' });
+            })
+            .catch(error => console.error("Errore nell'aggiunta del pagamento:", error));
         }
     };
 
-    const handleConferma = ()=>{
-        //non mi piace molto, devo scegliere
+    const handleConferma = () => {
         if (selectedAddress && selectedPayment) {
             navigate('/ordina/conferma-ordine');
         }
     }
+
     return (
         <div className={classes.orderContainer}>
             <h2>Procedi all'Ordine</h2>
 
-            {/* indirizzi*/}
+            {/* Indirizzi di Spedizione */}
             <section className={classes.section}>
                 <h3>Indirizzi di Spedizione</h3>
                 {addresses.map((address) => (
@@ -105,7 +144,7 @@ export default function OrdinaPage(){
                             onChange={() => handleAddressSelection(address.id)} 
                         />
                         <label>
-                            {`${address.via}, ${address.citta} ${address.cap}, ${address.nazione}`}
+                            {`${address.via}, ${address.città} ${address.cap}, ${address.nazione}`}
                         </label>
                     </div>
                 ))}
@@ -127,8 +166,8 @@ export default function OrdinaPage(){
                     <input 
                         type="text" 
                         placeholder="Città" 
-                        value={newAddress.citta} 
-                        onChange={(e) => setNewAddress({ ...newAddress, citta: e.target.value })} 
+                        value={newAddress.città} 
+                        onChange={(e) => setNewAddress({ ...newAddress, città: e.target.value })} 
                         className={classes.newInput}
                     />
                     <input 
@@ -142,7 +181,7 @@ export default function OrdinaPage(){
                 </div>
             </section>
 
-            {/*  Pagamenti */}
+            {/* Metodi di Pagamento */}
             <section className={classes.section}>
                 <h3>Metodi di Pagamento</h3>
                 {payments.map((payment) => (
@@ -152,7 +191,7 @@ export default function OrdinaPage(){
                             checked={selectedPayment === payment.id} 
                             onChange={() => handlePaymentSelection(payment.id)} 
                         />
-                        <label>{`${payment.tipoCarta} - ${payment.nomeCarta}, ${payment.numeroCarta}, Scadenza: ${payment.scadenza}`}</label>
+                        <label>{`${payment.tipoCarta} - ${payment.nomeCarta}, ${payment.numeroCarta}, Scadenza: ${payment.dataScadenza}`}</label>
                     </div>
                 ))}
                 <div className={classes.newPaymentForm}>
@@ -172,9 +211,18 @@ export default function OrdinaPage(){
                     />
                     <input 
                         type="text" 
-                        placeholder="Data di Scadenza (MM/AA)" 
-                        value={newPayment.scadenza} 
-                        onChange={(e) => setNewPayment({ ...newPayment, scadenza: e.target.value })} 
+                        placeholder="Mese (MM)" 
+                        maxLength="2"
+                        value={newPayment.meseScadenza} 
+                        onChange={(e) => setNewPayment({ ...newPayment, meseScadenza: e.target.value.slice(0, 2) })} 
+                        className={classes.newInput}
+                    />
+                    <input 
+                        type="text" 
+                        placeholder="Anno (AAAA)" 
+                        maxLength="4"
+                        value={newPayment.annoScadenza} 
+                        onChange={(e) => setNewPayment({ ...newPayment, annoScadenza: e.target.value.slice(0, 4) })} 
                         className={classes.newInput}
                     />
                     <input 
@@ -189,10 +237,7 @@ export default function OrdinaPage(){
             </section>
 
             <Button label="Conferma Ordine" className={classes.confirmButton} onClick={handleConferma} />
-            <Outlet/>
-            
+            <Outlet />
         </div>
     );
 }
-
-
