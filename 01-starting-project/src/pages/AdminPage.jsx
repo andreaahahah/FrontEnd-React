@@ -9,10 +9,12 @@ import { FileUpload } from 'primereact/fileupload';
 import classes from '../cssPages/AdminPage.module.css';
 import axios from 'axios';
 import { AuthContext } from '../GlobalContext/AuthContext';
+import { useTranslation } from 'react-i18next';  // Importa il hook useTranslation
 
 export default function AdminPage() {
     const { isAuthenticated, userRoles, keycloak } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { t } = useTranslation();  // Inizializza il traduttore
 
     useEffect(() => {
         if (!isAuthenticated || !userRoles.includes("SuperAdmin")) {
@@ -42,7 +44,6 @@ export default function AdminPage() {
 
     const handleFileUpload = (e) => {
         const files = e.files;
-        console.log("File selezionati:", files);
         setProductData((prevData) => ({
             ...prevData,
             immagini: files
@@ -50,9 +51,8 @@ export default function AdminPage() {
     };
 
     const handleSaveProduct = async () => {
-        // Verifica che i campi obbligatori siano compilati
         if (!productData.nome || !productData.descrizione || productData.prezzo <= 0 || !productData.marca || productData.quantita <= 0 || !productData.categoria || productData.immagini.length === 0) {
-            alert("Compila tutti i campi obbligatori e aggiungi almeno un'immagine.");
+            alert(t('adminPage.validationError'));  // Traduci il messaggio di errore
             return;
         }
 
@@ -73,7 +73,7 @@ export default function AdminPage() {
             });
 
             if (response.status >= 200 && response.status < 300) {
-                alert('Prodotto aggiunto con successo!');
+                alert(t('adminPage.successMessage'));  // Traduci il messaggio di successo
                 setProductData({
                     nome: '',
                     descrizione: '',
@@ -85,12 +85,11 @@ export default function AdminPage() {
                     categoria: ''
                 });
             } else {
-                alert("Si è verificato un errore durante il salvataggio del prodotto.");
-                console.error("Errore nella risposta del server:", response);
+                alert(t('adminPage.errorMessage'));  // Traduci il messaggio di errore
             }
         } catch (error) {
             console.error('Errore durante il salvataggio del prodotto:', error);
-            alert("Errore durante il salvataggio del prodotto.");
+            alert(t('adminPage.errorMessage'));  // Traduci il messaggio di errore
         }
     };
 
@@ -98,18 +97,18 @@ export default function AdminPage() {
         <>
             {(isAuthenticated && userRoles.includes("SuperAdmin")) ? (
                 <div className={classes.adminContainer}>
-                    <h2>Carica Nuovo Prodotto</h2>
+                    <h2>{t('adminPage.title')}</h2>
                     <div className={classes.formGroup}>
                         <InputText
                             name="nome"
-                            placeholder="Nome del prodotto"
+                            placeholder={t('adminPage.productName')}
                             value={productData.nome}
                             onChange={handleInputChange}
                             className={classes.textAreaWithPadding}
                         />
                         <InputTextarea
                             name="descrizione"
-                            placeholder="Descrizione"
+                            placeholder={t('adminPage.productDescription')}
                             rows={4}
                             value={productData.descrizione}
                             onChange={handleInputChange}
@@ -118,48 +117,48 @@ export default function AdminPage() {
 
                         <InputNumber
                             name="prezzo"
-                            placeholder="Prezzo"
+                            placeholder={t('adminPage.price')}
                             value={productData.prezzo}
-                            onValueChange={(e) => setProductData(prevData => ({ ...prevData, prezzo: e.value }))}
-                            mode="currency"
+                            onValueChange={(e) => setProductData(prevData => ({ ...prevData, prezzo: e.value }))} 
+                            mode="currency" 
                             currency="EUR"
                         />
                         <InputText
                             name="marca"
-                            placeholder="Marca"
+                            placeholder={t('adminPage.brand')}
                             value={productData.marca}
                             onChange={handleInputChange}
                             className={classes.textAreaWithPadding}
                         />
                         <InputNumber
                             name="quantita"
-                            placeholder="Quantità"
+                            placeholder={t('adminPage.quantity')}
                             value={productData.quantita}
                             onValueChange={(e) => setProductData(prevData => ({ ...prevData, quantita: e.value }))}
                         />
                         <InputText
                             name="categoria"
-                            placeholder="Categoria"
+                            placeholder={t('adminPage.category')}
                             value={productData.categoria}
                             onChange={handleInputChange}
                             className={classes.textAreaWithPadding}
                         />
                         <div className={classes.radioGroup}>
-                            <label>In Vetrina:</label>
+                            <label>{t('adminPage.isInShowcase')}:</label>
                             <RadioButton
                                 name="vetrina"
                                 value={true}
                                 onChange={() => handleVetrinaChange(true)}
                                 checked={productData.vetrina === true}
                             />
-                            <label>Si</label>
+                            <label>{t('adminPage.yes')}</label>
                             <RadioButton
                                 name="vetrina"
                                 value={false}
                                 onChange={() => handleVetrinaChange(false)}
                                 checked={productData.vetrina === false}
                             />
-                            <label>No</label>
+                            <label>{t('adminPage.no')}</label>
                         </div>
                         <FileUpload
                             name="immagini"
@@ -168,9 +167,10 @@ export default function AdminPage() {
                             accept="image/*"
                             maxFileSize={1000000}
                             onSelect={handleFileUpload}
+                            chooseOptions={{ className: classes.fileUploadButton }}
                         />
                     </div>
-                    <Button label="Salva Prodotto" onClick={handleSaveProduct} className={classes.saveButton} />
+                    <Button label={t('adminPage.saveButton')} onClick={handleSaveProduct} className={classes.saveButton} />
                 </div>
             ) : null}
         </>

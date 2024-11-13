@@ -4,7 +4,7 @@
   align-items: center;
 }
 .modern-input {
-  width: 100%;
+  width: 80%;
   max-width: 230px; /* Larghezza massima */
   min-width: 130px; /* Larghezza minima */
   padding: 7px 15px;
@@ -51,7 +51,7 @@
 }
 
 .custom-button {
-  background-color: #255c99; /* Colore blu */
+  background-color: #255c99; 
   color: white;
   padding: 8px 16px;
   border: none;

@@ -109,3 +109,7 @@ input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtext
     padding: 10px; /* Puoi regolare il valore a tuo piacimento */
     box-sizing: border-box; /* Assicura che il padding non alteri la dimensione del campo */
 }
+.fileUploadButton {
+    padding: 10px 20px; /* Aggiungi il padding come preferisci */
+    font-size: 16px; /* Regola la dimensione del testo se necessario */
+}

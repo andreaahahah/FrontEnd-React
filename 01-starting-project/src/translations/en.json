@@ -1,0 +1,19 @@
+{
+    "adminPage": {
+      "title": "Upload New Product",
+      "productName": "Product Name",
+      "productDescription": "Description",
+      "price": "Price",
+      "brand": "Brand",
+      "quantity": "Quantity",
+      "category": "Category",
+      "isInShowcase": "In Showcase",
+      "yes": "Yes",
+      "no": "No",
+      "saveButton": "Save Product",
+      "successMessage": "Product successfully added!",
+      "errorMessage": "An error occurred while saving the product.",
+      "validationError": "Please fill in all mandatory fields and add at least one image."
+    }
+  }
+  

@@ -1,0 +1,19 @@
+{
+    "adminPage": {
+      "title": "Carica Nuovo Prodotto",
+      "productName": "Nome del prodotto",
+      "productDescription": "Descrizione",
+      "price": "Prezzo",
+      "brand": "Marca",
+      "quantity": "Quantità",
+      "category": "Categoria",
+      "isInShowcase": "In Vetrina",
+      "yes": "Si",
+      "no": "No",
+      "saveButton": "Salva Prodotto",
+      "successMessage": "Prodotto aggiunto con successo!",
+      "errorMessage": "Si è verificato un errore durante il salvataggio del prodotto.",
+      "validationError": "Compila tutti i campi obbligatori e aggiungi almeno un'immagine."
+    }
+  }
+  

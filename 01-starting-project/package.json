@@ -9,12 +9,15 @@
   "dependencies": {
     "@react-keycloak/web": "^3.4.0",
     "axios": "^1.7.7",
+    "i18next": "^23.16.5",
+    "i18next-browser-languagedetector": "^8.0.0",
     "keycloak-js": "^26.0.5",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
     "primereact": "^10.8.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-i18next": "^15.1.1",
     "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
