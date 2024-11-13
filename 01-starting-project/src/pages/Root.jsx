@@ -29,7 +29,7 @@ function RootLayout() {
       <header>
         <Link to="/" className="custom-link">
           <div className="header-content">
-            <h1 className="site-title">● STOCK HOUSE ●</h1>
+            <h1 className="site-title">●STOCK HOUSE●</h1>
           </div>
         </Link>
 

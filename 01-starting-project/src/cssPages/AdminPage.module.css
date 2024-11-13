@@ -3,7 +3,7 @@
 .adminContainer {
     max-width: 600px;
     margin: 2rem auto;
-    padding: 2rem;
+    padding: 2.5rem;
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -20,22 +20,30 @@ h2 {
     font-size: 1.8rem;
     margin-bottom: 2rem;
     font-weight: 600;
+    padding: 1rem;
 }
 
 .formGroup {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    padding: 1rem 0;
 }
 
 input[type="text"], .p-inputtext, .p-inputnumber, .p-inputtextarea {
     width: 100%;
-    padding: 0.8rem;
+    padding: 1rem; /* Aumentato per includere effetto sul placeholder */
     border: 1px solid #ced4da;
     border-radius: 8px;
     font-size: 1rem;
     background-color: #f9f9f9;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: #333; /* Colore testo */
+}
+
+input::placeholder, .p-inputtext::placeholder, .p-inputnumber::placeholder, .p-inputtextarea::placeholder {
+    color: #777; /* Colore placeholder */
+    opacity: 1; /* Assicura che sia completamente visibile */
 }
 
 input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtextarea:focus {
@@ -53,6 +61,7 @@ input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtext
     align-items: center;
     gap: 1rem;
     font-size: 1rem;
+    padding: 1rem 0;
 }
 
 .radioGroup label {
@@ -68,13 +77,13 @@ input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtext
 .p-fileupload {
     width: 100%;
     margin-top: 1rem;
-    padding: 0.75rem;
+    padding: 1rem;
 }
 
 .saveButton {
     margin-top: 2rem;
     width: 100%;
-    padding: 0.85rem;
+    padding: 1rem;
     font-size: 1.1rem;
     font-weight: bold;
     color: #fff;
@@ -95,4 +104,8 @@ input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtext
 .saveButton:active {
     transform: translateY(0);
     box-shadow: 0 4px 8px rgba(0, 86, 179, 0.2);
+}
+.textAreaWithPadding {
+    padding: 10px; /* Puoi regolare il valore a tuo piacimento */
+    box-sizing: border-box; /* Assicura che il padding non alteri la dimensione del campo */
 }

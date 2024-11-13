@@ -105,6 +105,7 @@ export default function AdminPage() {
                             placeholder="Nome del prodotto"
                             value={productData.nome}
                             onChange={handleInputChange}
+                            className={classes.textAreaWithPadding}
                         />
                         <InputTextarea
                             name="descrizione"
@@ -112,7 +113,9 @@ export default function AdminPage() {
                             rows={4}
                             value={productData.descrizione}
                             onChange={handleInputChange}
+                            className={classes.textAreaWithPadding}
                         />
+
                         <InputNumber
                             name="prezzo"
                             placeholder="Prezzo"
@@ -126,6 +129,7 @@ export default function AdminPage() {
                             placeholder="Marca"
                             value={productData.marca}
                             onChange={handleInputChange}
+                            className={classes.textAreaWithPadding}
                         />
                         <InputNumber
                             name="quantita"
@@ -138,6 +142,7 @@ export default function AdminPage() {
                             placeholder="Categoria"
                             value={productData.categoria}
                             onChange={handleInputChange}
+                            className={classes.textAreaWithPadding}
                         />
                         <div className={classes.radioGroup}>
                             <label>In Vetrina:</label>
