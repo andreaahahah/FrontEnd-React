@@ -113,3 +113,29 @@ input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtext
     padding: 10px 20px; /* Aggiungi il padding come preferisci */
     font-size: 16px; /* Regola la dimensione del testo se necessario */
 }
+
+.selectContainer {
+    margin: 10px; /* Aggiungi uno spazio intorno al dropdown */
+    padding: 5px; /* Padding per un po' di spazio all'interno */
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Ombra leggera per evidenziare il dropdown */
+  }
+  
+  /* Stile per il dropdown (select) */
+  select {
+    width: 150px; /* Imposta una larghezza fissa se necessario */
+    padding: 8px;
+    border: 1px solid #ccc; /* Colore del bordo */
+    border-radius: 5px; /* Arrotonda gli angoli */
+    font-size: 14px;
+    background-color: #f9f9f9; /* Colore di sfondo */
+    transition: all 0.3s ease-in-out; /* Animazione al focus */
+  }
+  
+  select:focus {
+    border-color: #007bff; /* Cambia il colore del bordo al focus */
+    outline: none; /* Rimuovi il contorno predefinito */
+  }
+  

@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
     keycloakInstance.init({
       onLoad: "check-sso",
-      redirectUri: window.location.href,
+      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
     }).then(authenticated => {
       if (authenticated) {
         setIsAuthenticated(true);

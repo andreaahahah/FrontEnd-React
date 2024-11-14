@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Carousel } from 'primereact/carousel';
-import { Tag } from 'primereact/tag';
-
+import { baseurl } from "../config";
 import classes from "../ComponentsCss/Categories.module.css"
 import axios from 'axios';
 import { LoadingContext } from '../GlobalContext/LoadingContext';
@@ -35,7 +34,7 @@ export default function Categorie() {
             handleLoading();
             try {
                 console.log("Recupero delle categorie in corso...");
-                const response = await axios.get("http://localhost:8081/prodottoCategoria/elenca");
+                const response = await axios.get(`${baseurl}/prodottoCategoria/elenca`);
                 //header autorization Bearer token
                 setCategorie(response.data);
             } catch (error) {

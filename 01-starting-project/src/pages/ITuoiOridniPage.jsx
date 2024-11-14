@@ -3,8 +3,13 @@ import { Button } from 'primereact/button';
 import axios from 'axios';
 import classes from '../cssPages/OrdersPage.module.css';
 import { AuthContext } from '../GlobalContext/AuthContext';
+import { baseurl } from "../config";
+import { LoadingContext } from '../GlobalContext/LoadingContext';
+import Spinner from '../Components/Spinner';
 
 export default function ITuoiOrdini() {
+    const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
+
     const { keycloak } = useContext(AuthContext);
     const [orders, setOrders] = useState([]);
     const [sortedByDate, setSortedByDate] = useState(true);
@@ -12,9 +17,18 @@ export default function ITuoiOrdini() {
     const token = keycloak?.token;
     const authHeader = { headers: { Authorization: `Bearer ${token}` } };
 
+    const handleLoading = () => {
+        startLoading();
+      };
+    
+      const endLoading = () => {
+        stopLoading();
+      };
+
     useEffect(() => {
+        handleLoading();
         // Recupera gli ordini dal backend
-        axios.get('http://localhost:8081/utente/ordini', authHeader)
+        axios.get(`${baseurl}/utente/ordini`, authHeader)
             .then(response => {
                 // Ordina gli ordini dal più recente al più vecchio
                 const sortedOrders = response.data.sort((a, b) => new Date(b.data) - new Date(a.data));
@@ -25,6 +39,7 @@ export default function ITuoiOrdini() {
                 console.error("Errore nel caricamento degli ordini:", error);
                 setIsLoaded(true); // In caso di errore, comunque segna il caricamento come completo
             });
+            endLoading();
     }, [token]); // Dipende dal token, quindi verrà rieseguito solo se cambia
 
     const handleSort = () => {
@@ -42,6 +57,9 @@ export default function ITuoiOrdini() {
   };
   
     return (
+        <main>
+        {isLoading && <Spinner />}
+      {!isLoading && (
         <div className={classes.ordersContainer}>
             <h2>I tuoi Ordini</h2>
             <Button label={`Ordina per data (${sortedByDate ? 'Recenti' : 'Meno Recenti'})`} onClick={handleSort} className={classes.sortButton} />
@@ -63,6 +81,8 @@ export default function ITuoiOrdini() {
                     ))}
                 </ul>
             )}
-        </div>
+        </div>)}
+        
+    </main>
     );
 }

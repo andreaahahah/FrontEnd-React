@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import classes from "../ComponentsCss/Ricerca.module.css";
 import { LoadingContext } from "../GlobalContext/LoadingContext";
-import spinnerStyles from "../ComponentsCss/Spinner.module.css";
 import axios from "axios";
+import { baseurl } from "../config";
+import Spinner from "./Spinner";
 
 export default function Prodotti({ searchText, tipo }) {
   const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
@@ -26,13 +27,13 @@ export default function Prodotti({ searchText, tipo }) {
         let response;
         
         if (searchText === "vetrina") {
-          response = await axios.get("http://localhost:8081/prodotto/elencaVetrina");
+          response = await axios.get(`${baseurl}/prodotto/elencaVetrina`);
         } else if (tipo === "c") {
-          response = await axios.get(`http://localhost:8081/prodottoCategoria/getProdotti?cate=${searchText}`);
+          response = await axios.get(`${baseurl}/prodottoCategoria/getProdotti?cate=${searchText}`);
         } else if (tipo === "m") {
-          response = await axios.get(`http://localhost:8081/prodotto/elencaProdByMarca?marca=${searchText}`);
+          response = await axios.get(`${baseurl}/prodotto/elencaProdByMarca?marca=${searchText}`);
         } else {
-          response = await axios.get(`http://localhost:8081/prodotto/getProdotti?prod=${searchText}`);
+          response = await axios.get(`${baseurl}/prodotto/getProdotti?prod=${searchText}`);
         }
 
         const productsWithImages = response.data.map(product => {
@@ -53,12 +54,9 @@ export default function Prodotti({ searchText, tipo }) {
   }, [searchText, tipo]);
 
   return (
-    <main className={isLoading ? spinnerStyles.blurred : ""}>
-      {isLoading && (
-        <div className={spinnerStyles["spinner-overlay"]}>
-          <div className={spinnerStyles.spinner}></div>
-        </div>
-      )}
+    <main >
+      {isLoading && <Spinner/>
+      }
 
       {!isLoading && (
         <div className={classes["products-grid"]}>

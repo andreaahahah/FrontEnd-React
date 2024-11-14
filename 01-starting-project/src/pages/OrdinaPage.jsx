@@ -6,15 +6,27 @@ import classes from '../cssPages/OrderPage.module.css';
 import { useCart } from '../GlobalContext/CartContext';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../GlobalContext/AuthContext';
+import { baseurl } from "../config";
+import { LoadingContext } from '../GlobalContext/LoadingContext';
 
 export default function OrdinaPage() {
+    const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
+
     const { keycloak } = useContext(AuthContext);
-    const { cartItems } = useCart();
+    const { cartItems, clearCart } = useCart();
     const navigate = useNavigate();
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [addresses, setAddresses] = useState([]);
     const [payments, setPayments] = useState([]);
+
+    const handleLoading = () => {
+        startLoading();
+      };
+    
+      const endLoading = () => {
+        stopLoading();
+      };
     
     const token = keycloak?.token;
     const authHeader = { headers: { Authorization: `Bearer ${token}` } };
@@ -23,21 +35,23 @@ export default function OrdinaPage() {
         if (cartItems.length === 0) {
             navigate('/cart');
         }
-        
-        // Carica indirizzi e metodi di pagamento dal backend
-        axios.get(`http://localhost:8081/utente/getIndirizzo`, authHeader)
+        handleLoading();
+       
+        axios.get(`${baseurl}/utente/getIndirizzo`, authHeader)
             .then(response => {
                 setAddresses(response.data);
-                console.log("Indirizzi caricati:", response.data);
+                
             })
             .catch(error => console.error("Errore nel caricamento degli indirizzi:", error));
 
-        axios.get(`http://localhost:8081/utente/getPagamento`, authHeader)
+        axios.get(`${baseurl}/utente/getPagamento`, authHeader)
             .then(response => {
                 setPayments(response.data);
-                console.log("Pagamenti caricati:", response.data);
+                
             })
             .catch(error => console.error("Errore nel caricamento dei pagamenti:", error));
+
+            endLoading();
     }, [cartItems, navigate]);
 
     const [newAddress, setNewAddress] = useState({
@@ -61,7 +75,7 @@ export default function OrdinaPage() {
     const handleAddNewAddress = () => {
         if (newAddress.nazione && newAddress.cap && newAddress.città && newAddress.via) {
             axios.post(
-                `http://localhost:8081/utente/addIndirizzo`,
+                `${baseurl}/utente/addIndirizzo`,
                 {},
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -94,7 +108,7 @@ export default function OrdinaPage() {
             const dataScadenza = `${annoScadenza}-${meseScadenza.padStart(2, '0')}-01`;
 
             axios.post(
-                `http://localhost:8081/utente/addPagamento`,
+                `${baseurl}/utente/addPagamento`,
                 {},
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -124,12 +138,39 @@ export default function OrdinaPage() {
     };
 
     const handleConferma = () => {
-        if (selectedAddress && selectedPayment) {
-            navigate('/ordina/conferma-ordine');
+        if (!selectedAddress || !selectedPayment) {
+            return;
         }
-    }
+    
+        const prodottoDTOList = cartItems.map(item => ({
+            id: item.id,  
+            quantita: item.quantita  
+        }));
+    
+        const body = {
+            prodottoDTOList: prodottoDTOList
+        };
+    
+
+        const ordineUrl = `${baseurl}/carrello/ordina?indirizzo=${selectedAddress}&pagamento=${selectedPayment}`;
+    
+        // Invio della richiesta POST
+        axios.post(ordineUrl, body, authHeader)
+            .then(response => {
+                console.log('Ordine confermato:', response);
+                clearCart(); 
+                navigate('/');  
+            })
+            .catch(error => {
+                console.error("Errore nel confermare l'ordine:", error);
+            });
+    };
+    
 
     return (
+        <main >
+      {isLoading && <Spinner/>}
+      {!isLoading && (
         <div className={classes.orderContainer}>
             <h2>Procedi all'Ordine</h2>
 
@@ -187,9 +228,9 @@ export default function OrdinaPage() {
                 {payments.map((payment) => (
                     <div key={payment.id} className={classes.paymentOption}>
                         <RadioButton 
-                            value={payment.id} 
-                            checked={selectedPayment === payment.id} 
-                            onChange={() => handlePaymentSelection(payment.id)} 
+                            value={payment.idPagamento} 
+                            checked={selectedPayment === payment.idPagamento} 
+                            onChange={() => handlePaymentSelection(payment.idPagamento)} 
                         />
                         <label>{`${payment.tipoCarta} - ${payment.nomeCarta}, ${payment.numeroCarta}, Scadenza: ${payment.dataScadenza}`}</label>
                     </div>
@@ -238,6 +279,7 @@ export default function OrdinaPage() {
 
             <Button label="Conferma Ordine" className={classes.confirmButton} onClick={handleConferma} />
             <Outlet />
-        </div>
+        </div>)}
+        </main>
     );
 }

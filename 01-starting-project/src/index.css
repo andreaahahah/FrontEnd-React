@@ -42,7 +42,10 @@ header {
   color: inherit;
 }
 
-
+.blurred {
+  filter: blur(2px); /* Riduce l'intensità della sfocatura */
+  pointer-events: none; /* Disabilita interazioni durante il caricamento */
+}
 .site-title {
   font-size: 2.5rem;
   font-weight: bold;
