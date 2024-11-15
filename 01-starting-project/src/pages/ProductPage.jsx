@@ -11,10 +11,18 @@ import axios from "axios";
 import { baseurl } from "../config";
 import { LoadingContext } from "../GlobalContext/LoadingContext";
 import Spinner from "../Components/Spinner";
+import { AuthContext } from "../GlobalContext/AuthContext";
+
 
 function ProductPage() {
   const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
-
+  const { isAuthenticated, user, login, logout, keycloak } = useContext(AuthContext);
+  const token = keycloak?.token;
+  const authHeader = { 
+    headers: { 
+        Authorization: `Bearer ${token}`
+    }
+}
   const { prodotto } = useParams(); // prendo l'id del prodotto dal path così posso cercarlo
 
   const location = useLocation(); // prendo tutto il prodotto che mi è stato passato dalla pagina precedente
@@ -72,6 +80,18 @@ function ProductPage() {
   const { nome, prezzo, marca, descrizione, immagini } = currentProduct;
 
   const openPopup = () => {
+    if(isAuthenticated){
+      
+      axios.post(`${baseurl}/carrello/add?prodotto=${prodottoId}&quantita=${quantity}`, {}, authHeader).then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.error("Errore nel caricamento degli ordini:", error);
+    });
+    }
+    //aggiungi anche il prodotto al backend come dettaglio carrello se è autenticato
+    //if autenticated allora manda i prod al back
+    //senza else perchè tanto li aggiungi e basta al front
     addToCart({
       id: prodottoId,
       name: nome,

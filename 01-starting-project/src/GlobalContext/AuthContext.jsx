@@ -18,8 +18,7 @@ export const AuthProvider = ({ children }) => {
 
     keycloakInstance.init({
       onLoad: "check-sso",
-      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
-    }).then(authenticated => {
+      silentCheckSsoRedirectUri: window.location.origin     }).then(authenticated => {
       if (authenticated) {
         setIsAuthenticated(true);
         setUser(keycloakInstance.tokenParsed);
@@ -39,6 +38,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = () => {
     keycloak?.login();
+    //metti qui il recupero del carrello dopo che ti sei loggato
   };
 
   const logout = () => {
@@ -54,3 +54,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+

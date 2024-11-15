@@ -1,56 +1,108 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { AuthContext } from "./AuthContext";
+import axios from "axios";
+import { baseurl } from "../config";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { isAuthenticated, keycloak } = useContext(AuthContext);
 
-    // se c'erano gia prodotti li tengo, altrimenti è vuoto
-    const [cartItems, setCartItems] = useState(() => {
-        const savedCart = localStorage.getItem('cart');
-        return savedCart ? JSON.parse(savedCart) : [];
-    });
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-    
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cartItems));
-    }, [cartItems]);
+  const mapBackendToFrontend = (backendCart) => {
+    return backendCart.map((item) => ({
+      id: item.idProdotto.id,
+      name: item.idProdotto.nome,
+      quantity: item.quantità,
+      price: item.prezzo,
+      imageUrl: item.idProdotto.immagini
+        ? `data:image/jpeg;base64,${item.idProdotto.immagini.split(",")[0]}`
+        : null,
+    }));
+  };
 
+  useEffect(() => {
+    const syncCart = async () => {
+      const savedCart = localStorage.getItem("cart");
+      const localCart = savedCart ? JSON.parse(savedCart) : [];
   
-    const addToCart = (product) => {
-        setCartItems((prevItems) => {
-            const existingProductIndex = prevItems.findIndex(item => item.id === product.id);
-            if (existingProductIndex !== -1) {
-                // se già c'è aggiorno e basta
-                const updatedCart = [...prevItems];
-                updatedCart[existingProductIndex].quantity += product.quantity;
-                return updatedCart;
+      if (isAuthenticated) {
+        try {
+          const token = keycloak?.token;
+  
+          const response = await axios.get(`${baseurl}/carrello/elenca`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+  
+          const backendCart = response.data || [];
+          const mappedBackendCart = mapBackendToFrontend(backendCart);
+  
+          let updatedCart = [...localCart];
+  
+          mappedBackendCart.forEach((backendItem) => {
+            const localItemIndex = updatedCart.findIndex(
+              (item) => item.id === backendItem.id
+            );
+            if (localItemIndex !== -1) {
+              updatedCart[localItemIndex].quantity = backendItem.quantity;
+            } else {
+              updatedCart.push(backendItem);
             }
-            // altrimenti lo aggiungo nuovo
-            return [...prevItems, product];
-        });
+          });
+  
+          setCartItems(updatedCart);
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+        } catch (error) {
+          console.error("Errore nel recupero del carrello dal backend:", error);
+        }
+      } else {
+        setCartItems(localCart);
+      }
     };
+  
+    syncCart();
+  }, [isAuthenticated, keycloak]);
 
-    const removeFromCart = (itemId) => {
-        console.log(`Rimuovendo l'elemento con ID: ${itemId}`);
-        setCartItems(prevItems => {
-            const updatedItems = prevItems.filter(item => item.id !== itemId);
-            console.log("Elementi aggiornati:", updatedItems);
-            return updatedItems;
-        });
-    };
+  const addToCart = (product) => {
+    setCartItems((prevItems) => {
+      const existingProductIndex = prevItems.findIndex(
+        (item) => item.id === product.id
+      );
+      if (existingProductIndex !== -1) {
+        const updatedCart = [...prevItems];
+        updatedCart[existingProductIndex].quantity += product.quantity;
+        return updatedCart;
+      }
+      return [...prevItems, product];
+    });
+  };
 
-    const clearCart = () => {
-        setCartItems([]);
-    };
+  const removeFromCart = (itemId) => {
+    setCartItems((prevItems) => {
+      const updatedItems = prevItems.filter((item) => item.id !== itemId);
+      localStorage.setItem("cart", JSON.stringify(updatedItems));
+      return updatedItems;
+    });
+  };
 
-    return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
-            {children}
-        </CartContext.Provider>
-    );
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem("cart");
+  };
+
+  return (
+    <CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export const useCart = () => {
-    return useContext(CartContext);
+  return useContext(CartContext);
 };

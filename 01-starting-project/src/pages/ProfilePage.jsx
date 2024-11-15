@@ -1,22 +1,29 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../GlobalContext/AuthContext";
 import classes from "../cssPages/Profile.module.css";
 
 function ProfilePage() {
   const { isAuthenticated, user, login, logout, keycloak } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
     logout();
+   
   };
 
   const handleRegister = () => {
-    console.log(keycloak)
-    // Se Keycloak è configurato e l'utente non è autenticato, redirigi alla registrazione
+    console.log(keycloak);
     if (keycloak) {
-      keycloak.register(); // Inizia il flusso di registrazione di Keycloak
+      keycloak.register();  // Avvia il flusso di registrazione di Keycloak
     }
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      console.log("Utente disconnesso");
+    }
+  }, [isAuthenticated]);
 
   return (
     <>

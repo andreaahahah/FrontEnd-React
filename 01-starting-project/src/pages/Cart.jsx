@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useCart } from '../GlobalContext/CartContext'; 
 import { Button } from 'primereact/button';
 import classes from '../cssPages/Cart.module.css'; 
@@ -18,7 +18,9 @@ function CartPage() {
             navigate('/profile')
         }
     };
-
+    useEffect(() => {
+       
+    }, [cartItems]); 
      
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);

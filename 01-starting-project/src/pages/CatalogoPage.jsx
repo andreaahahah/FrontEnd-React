@@ -6,40 +6,29 @@ import { baseurl } from "../config";
 function CatalogoPage() {
     const { keycloak } = useContext(AuthContext);
     const token = keycloak?.token;
-    const authHeader = { 
-        headers: { 
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"  // Garantisce che il backend interpreti il contenuto come JSON
-        }
-    };
 
     useEffect(() => {
-        if (!token) return;
-        const prodottoDTOList = [  // Cambiato il nome della lista
-            { id: 303, quantita: 2 },
-            { id: 352, quantita: 1 }
-        ];
+        if (!token) {
+            
+            return;}
 
-        // Definizione del body della richiesta con la struttura corretta
-        const body = {
-            prodottoDTOList: prodottoDTOList
+        const fetchCarrello = async () => {
+            try {
+                console.log(`${baseurl}/carrello/elenca`)
+                const response = await axios.get(`${baseurl}/carrello/elenca`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                console.log("Dati del carrello:", response.data);
+            } catch (error) {
+                console.error("Errore nel recupero del carrello:", error);
+            }
         };
 
-
-        // Recupera gli ordini dal backend
-        axios.post(`${baseurl}/carrello/ordina?utente=1&indirizzo=1&pagamento=2`, body, authHeader)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.error("Errore nel caricamento degli ordini:", error);
-            });
+        fetchCarrello();
     }, [token]);
 
     return (
-        <h2> 
-            catalogo 
-        </h2>
+        <h2>Catalogo</h2>
     );
 }
 
