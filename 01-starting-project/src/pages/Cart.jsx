@@ -35,7 +35,7 @@ function CartPage() {
                         {cartItems.map((item, index) => (
                             <li key={index} className={classes.cartItem}>
                                 <div className={classes.productDetails}>
-                                    <img src={item.imageUrl} alt={item.name} className={classes.productImage} /> {/* Immagine del prodotto */}
+                                    <img src={item.imageUrl} alt={item.name} className={classes.productImage} /> 
                                     <div className={classes.textDetails}>
                                         <h4>{item.name}</h4>
                                         <p>Prezzo: {item.price}€</p>

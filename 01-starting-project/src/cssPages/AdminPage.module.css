@@ -121,6 +121,7 @@ input[type="text"]:focus, .p-inputtext:focus, .p-inputnumber:focus, .p-inputtext
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Ombra leggera per evidenziare il dropdown */
+    margin-top: 1.5rem;
   }
   
   /* Stile per il dropdown (select) */

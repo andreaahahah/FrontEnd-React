@@ -37,7 +37,7 @@ export default function Prodotti({ searchText, tipo }) {
         }
 
         const productsWithImages = response.data.map(product => {
-          // Decodifica le immagini Base64 e aggiungile all'oggetto prodotto
+          // Decodifica le immagini Base64 
           const images = product.immagini.split(",").map(image => `data:image/jpeg;base64,${image}`);
           return { ...product, immagini: images };
         });

@@ -17,7 +17,7 @@ export default function Ricerca() {
     return (
         
                 <>
-                    <div style={{ marginBottom: '1.5rem' }}>
+                    <div style={{ marginBottom: '1.5rem', marginTop:'1.5rem' }}>
                         <div className={classes["h2"]} style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>
                             Risultati per: <span style={{ fontWeight: 'normal' }}>{searchText}</span>
                         </div>

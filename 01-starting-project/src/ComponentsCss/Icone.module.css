@@ -2,18 +2,21 @@
   display: flex;
   justify-content: flex-end; 
   align-items: center;
+  height: 1.5rem;
 }
 .modern-input {
-  width: 80%;
-  max-width: 230px; /* Larghezza massima */
-  min-width: 130px; /* Larghezza minima */
-  padding: 7px 15px;
+  width: 60%;
+  height: 0.5rem;
+  max-width: 180px; /* Larghezza massima ridotta */
+  min-width: 100px; /* Larghezza minima ridotta */
+  padding: 5px 10px; /* Padding ridotto */
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 15px; /* Raggio angoli ridotto */
   background-color: white;
   outline: none;
-  font-size: 14px;
+  font-size: 12px; /* Font-size ridotto */
 }
+
 
 .icon-button {
   background: none;

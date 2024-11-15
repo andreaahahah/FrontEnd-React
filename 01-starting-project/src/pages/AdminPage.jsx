@@ -9,24 +9,24 @@ import { FileUpload } from "primereact/fileupload";
 import classes from "../cssPages/AdminPage.module.css";
 import axios from "axios";
 import { AuthContext } from "../GlobalContext/AuthContext";
-import { useTranslation } from "react-i18next"; // Importa il hook useTranslation
+import { useTranslation } from "react-i18next"; 
 import { baseurl } from "../config";
 
 export default function AdminPage() {
   const { isAuthenticated, userRoles, keycloak } = useContext(AuthContext);
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(); // Usa direttamente `t` e `i18n`
+  const { t, i18n } = useTranslation(); 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
 
   const handleLanguageChange = (e) => {
     const newLang = e.target.value;
     setSelectedLanguage(newLang);
-    i18n.changeLanguage(newLang); // Cambia la lingua in i18next
+    i18n.changeLanguage(newLang); 
   };
 
   useEffect(() => {
     if (!isAuthenticated || !userRoles.includes("SuperAdmin")) {
-      navigate("/"); // Reindirizza alla home page se l'utente non è autenticato o non ha il ruolo
+      navigate("/"); 
     }
   }, [isAuthenticated, userRoles, navigate]);
 
@@ -68,7 +68,7 @@ export default function AdminPage() {
       !productData.categoria ||
       productData.immagini.length === 0
     ) {
-      alert(t("adminPage.validationError")); // Traduci il messaggio di errore
+      alert(t("adminPage.validationError")); 
       return;
     }
 
@@ -93,7 +93,7 @@ export default function AdminPage() {
       );
 
       if (response.status >= 200 && response.status < 300) {
-        alert(t("adminPage.successMessage")); // Traduci il messaggio di successo
+        alert(t("adminPage.successMessage")); 
         setProductData({
           nome: "",
           descrizione: "",
@@ -105,11 +105,11 @@ export default function AdminPage() {
           categoria: "",
         });
       } else {
-        alert(t("adminPage.errorMessage")); // Traduci il messaggio di errore
+        alert(t("adminPage.errorMessage")); 
       }
     } catch (error) {
       console.error("Errore durante il salvataggio del prodotto:", error);
-      alert(t("adminPage.errorMessage")); // Traduci il messaggio di errore
+      alert(t("adminPage.errorMessage")); 
     }
   };
 

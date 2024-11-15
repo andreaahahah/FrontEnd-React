@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const [userRoles, setUserRoles] = useState([]); // Stato per i ruoli dell'utente
+  const [userRoles, setUserRoles] = useState([]); 
   const [keycloak, setKeycloak] = useState(null);
 
   useEffect(() => {
@@ -24,9 +24,9 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         setUser(keycloakInstance.tokenParsed);
         
-        // Ottieni i ruoli dal token JWT
+        // prendo i ruoli
         const roles = keycloakInstance.tokenParsed?.realm_access?.roles || [];
-        setUserRoles(roles); // Salva i ruoli dell'utente nello stato
+        setUserRoles(roles); 
       } else {
         console.log("User not authenticated");
       }

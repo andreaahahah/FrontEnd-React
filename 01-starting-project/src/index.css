@@ -28,6 +28,7 @@ header {
   background-color: #991b1b;
   color: white;
   padding: 2rem 0;
+  height: 10rem;
 }
 .page-content {
   padding-top: 150px; /* Compensa l'altezza dell'header fisso per evitare sovrapposizione con i contenuti */
