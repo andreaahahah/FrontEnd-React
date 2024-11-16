@@ -33,7 +33,20 @@ export const CartProvider = ({ children }) => {
       if (isAuthenticated) {
         try {
           const token = keycloak?.token;
+          const authHeader = { headers: { Authorization: `Bearer ${token}` } };
   
+          // Invia ogni prodotto dal localStorage al backend
+          for (const item of localCart) {
+            const { id, quantity } = item;
+  
+            await axios.post(
+              `${baseurl}/carrello/add?prodotto=${id}&quantita=${quantity}`,
+              {},
+              authHeader
+            );
+          }
+  
+          // Dopo aver inviato i prodotti, richiediamo il carrello dal backend
           const response = await axios.get(`${baseurl}/carrello/elenca`, {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -41,31 +54,25 @@ export const CartProvider = ({ children }) => {
           const backendCart = response.data || [];
           const mappedBackendCart = mapBackendToFrontend(backendCart);
   
-          let updatedCart = [...localCart];
-  
-          mappedBackendCart.forEach((backendItem) => {
-            const localItemIndex = updatedCart.findIndex(
-              (item) => item.id === backendItem.id
-            );
-            if (localItemIndex !== -1) {
-              updatedCart[localItemIndex].quantity = backendItem.quantity;
-            } else {
-              updatedCart.push(backendItem);
-            }
-          });
-  
-          setCartItems(updatedCart);
-          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          setCartItems(mappedBackendCart);
+          localStorage.setItem("cart", JSON.stringify(mappedBackendCart));
         } catch (error) {
-          console.error("Errore nel recupero del carrello dal backend:", error);
+          console.error("Errore nel recupero o invio del carrello:", error);
         }
       } else {
-        setCartItems(localCart);
+        // Evita di reimpostare lo stato se è identico al contenuto di localStorage
+        setCartItems((prevItems) => {
+          if (JSON.stringify(prevItems) !== JSON.stringify(localCart)) {
+            return localCart;
+          }
+          return prevItems;
+        });
       }
     };
   
     syncCart();
   }, [isAuthenticated, keycloak]);
+  
 
   const addToCart = (product) => {
     setCartItems((prevItems) => {
@@ -81,13 +88,32 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const removeFromCart = (itemId) => {
-    setCartItems((prevItems) => {
-      const updatedItems = prevItems.filter((item) => item.id !== itemId);
-      localStorage.setItem("cart", JSON.stringify(updatedItems));
-      return updatedItems;
-    });
+  const removeFromCart = async (itemId) => {
+    try {
+      const token = keycloak?.token;
+      const authHeader = { headers: { Authorization: `Bearer ${token}` } };
+  
+      // Invia la richiesta al backend per rimuovere il prodotto dal carrello
+      await axios.post(
+        `${baseurl}/carrello/rimuovi?prodotto=${itemId}`,
+        {},
+        authHeader
+      );
+  
+      // Dopo aver rimosso l'elemento dal backend, aggiorniamo il carrello nel frontend
+      
+    } catch (error) {
+      console.error("Errore durante la rimozione del prodotto dal carrello:", error);
+    }
+    finally{
+      setCartItems((prevItems) => {
+        const updatedItems = prevItems.filter((item) => item.id !== itemId);
+        localStorage.setItem("cart", JSON.stringify(updatedItems));
+        return updatedItems;
+      });
+    }
   };
+  
 
   const clearCart = () => {
     setCartItems([]);

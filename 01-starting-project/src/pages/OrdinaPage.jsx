@@ -81,7 +81,11 @@ export default function OrdinaPage() {
       newAddress.cap &&
       newAddress.città &&
       newAddress.via
-    ) {
+    ) 
+    if(newAddress.cap.length<4 || newAddress.cap.length>5){
+      return;
+    }
+    {
       axios
         .post(
           `${baseurl}/utente/addIndirizzo`,
@@ -121,6 +125,12 @@ export default function OrdinaPage() {
       newPayment;
 
     if (numeroCarta && nomeCarta && meseScadenza && annoScadenza && tipoCarta) {
+      if(meseScadenza<1 || meseScadenza>12){
+          return;
+      }
+      if(annoScadenza<2024 || annoScadenza>2010){
+          return;
+      }
       const dataScadenza = `${annoScadenza}-${meseScadenza.padStart(
         2,
         "0"
@@ -173,7 +183,7 @@ export default function OrdinaPage() {
 
     const prodottoDTOList = cartItems.map((item) => ({
       id: item.id,
-      quantita: item.quantita,
+      quantita: item.quantity,
     }));
 
     const body = {
@@ -181,7 +191,7 @@ export default function OrdinaPage() {
     };
 
     const ordineUrl = `${baseurl}/carrello/ordina?indirizzo=${selectedAddress}&pagamento=${selectedPayment}`;
-
+    console.log(body);
     // Invio della richiesta POST
     axios
       .post(ordineUrl, body, authHeader)
