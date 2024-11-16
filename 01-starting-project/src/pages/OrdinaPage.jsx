@@ -277,7 +277,7 @@ export default function OrdinaPage() {
             ))}
             <div className={classes.newPaymentForm}>
               <input
-                type="text"
+                type="number"
                 placeholder="Numero Carta"
                 value={newPayment.numeroCarta}
                 onChange={(e) =>
@@ -295,7 +295,9 @@ export default function OrdinaPage() {
                 className={classes.newInput}
               />
               <input
-                type="text"
+                type="number"
+                min="1"
+                max="12"
                 placeholder="Mese Scadenza"
                 value={newPayment.meseScadenza}
                 onChange={(e) =>
@@ -303,8 +305,10 @@ export default function OrdinaPage() {
                 }
                 className={classes.newInput}
               />
+
               <input
-                type="text"
+                type="number"
+                min="2024"
                 placeholder="Anno Scadenza"
                 value={newPayment.annoScadenza}
                 onChange={(e) =>
@@ -312,6 +316,7 @@ export default function OrdinaPage() {
                 }
                 className={classes.newInput}
               />
+
               <input
                 type="text"
                 placeholder="Tipo Carta"
