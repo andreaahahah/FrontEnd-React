@@ -24,7 +24,8 @@ export const AuthProvider = ({ children }) => {
         silentCheckSsoRedirectUri: window.location.origin,
       })
       .then((authenticated) => {
-        if (authenticated) {
+        
+        if (authenticated ) {
           setIsAuthenticated(true);
           setUser(keycloakInstance.tokenParsed);
 
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }) => {
           const name = keycloakInstance.tokenParsed.given_name;
           const surname = keycloakInstance.tokenParsed.family_name;
           const mail = keycloakInstance.tokenParsed.email;
-
+          if(token){
           axios
             .post(
               `${baseurl}/utente/addUtente?nome=${name}&cognome=${surname}&email=${mail}`,
@@ -43,7 +44,9 @@ export const AuthProvider = ({ children }) => {
               {
                 headers: { Authorization: `Bearer ${token}` },
               }
-            );
+            ).catch(error =>{
+
+            });}
         }
       });
 

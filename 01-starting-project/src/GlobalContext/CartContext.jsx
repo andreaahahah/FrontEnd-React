@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import axios from "axios";
 import { baseurl } from "../config";
+import { showToast } from "../ToastManager";
 
 const CartContext = createContext();
 
@@ -115,9 +116,19 @@ export const CartProvider = ({ children }) => {
   };
   
 
-  const clearCart = () => {
-    setCartItems([]);
+  const clearCart = async() => {
+    try {
+      const itemsToClear = [...cartItems];
+  
+      for (const item of itemsToClear) {
+        await removeFromCart(item.id);
+      }
+      setCartItems([]);
     localStorage.removeItem("cart");
+    }
+    catch (error) {
+      showToast.error(`Problemi nella rimozione dal carrello`)
+    }
   };
 
   const clearCartAfterError = async () => {
@@ -131,10 +142,11 @@ export const CartProvider = ({ children }) => {
         const response = await axios.get(`${baseurl}/carrello/elenca`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setCartItems(response.data);
+        const mappedBackendCart = mapBackendToFrontend(response.data);
+        setCartItems(mappedBackendCart);
         //TODO mappalo bene quando lo metti nel carrello
-        localStorage.setItem("cart", JSON.stringify(response.data));
-        console.log("Carrello recuperato dopo l'errore:", response.data);
+        localStorage.setItem("cart", JSON.stringify(mappedBackendCart));
+        console.log("Carrello recuperato dopo l'errore:", mappedBackendCart);
       }
     } catch (error) {
       console.error("Errore nel recupero del carrello dopo un errore:", error);

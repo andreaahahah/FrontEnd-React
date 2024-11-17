@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Carousel } from "primereact/carousel";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import Popup from "../Components/Popup";
+import { showToast } from "../ToastManager";
 import { InputNumber } from "primereact/inputnumber";
 import { useCart } from "../GlobalContext/CartContext";
 import axios from "axios";
@@ -29,7 +29,7 @@ function ProductPage() {
 
   const { product } = location.state || {};
 
-  const [popupVisible, setPopupVisible] = useState(false);
+  
 
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
@@ -80,29 +80,39 @@ function ProductPage() {
   const { nome, prezzo, marca, descrizione, immagini } = currentProduct;
 
   const openPopup = () => {
-    if(isAuthenticated){
+    var i = 0;
+    if(isAuthenticated && token){
       
-      axios.post(`${baseurl}/carrello/add?prodotto=${prodottoId}&quantita=${quantity}`, {}, authHeader).then(response => {
-        console.log(response);
-    })
-    .catch(error => {
-        console.error("Errore nel caricamento degli ordini:", error);
-    });
+      axios.post(`${baseurl}/carrello/add?prodotto=${prodottoId}&quantita=${quantity}`, {}, authHeader)
+      .then(response => { 
+        if(response.data){
+          showToast.error(`${response.data}`)
+        }
+        else{
+            addToCart({
+              id: prodottoId,
+              name: nome,
+              quantity: quantity,
+              price: prezzo,
+              imageUrl: immagini[0], // Usa la prima immagine decodificata
+            });
+            showToast.success(`Prodotto Aggiunto al carrello`)}
+
+        }
+        
+    )}else{
+      addToCart({
+        id: prodottoId,
+        name: nome,
+        quantity: quantity,
+        price: prezzo,
+        imageUrl: immagini[0], // Usa la prima immagine decodificata
+      });
+      showToast.success(`Prodotto Aggiunto al carrello`)
     }
-    //aggiungi anche il prodotto al backend come dettaglio carrello se è autenticato
-    //if autenticated allora manda i prod al back
-    //senza else perchè tanto li aggiungi e basta al front
-    addToCart({
-      id: prodottoId,
-      name: nome,
-      quantity: quantity,
-      price: prezzo,
-      imageUrl: immagini[0], // Usa la prima immagine decodificata
-    });
-    setPopupVisible(true);
-    setTimeout(() => {
-      setPopupVisible(false);
-    }, 1000);
+   
+    
+    
   };
 
   const imageTemplate = (item) => {
@@ -163,16 +173,6 @@ function ProductPage() {
                   onClick={openPopup}
                 />
 
-                <Popup
-                  visible={popupVisible}
-                  onHide={() => setPopupVisible(false)}
-                >
-                  {quantity > 1 ? (
-                    <p> {quantity} prodotti aggiunti al carrello</p>
-                  ) : (
-                    <p> {quantity} prodotto aggiunto al carrello</p>
-                  )}
-                </Popup>
               </div>
             </div>
           </Card>
@@ -181,5 +181,6 @@ function ProductPage() {
     </main>
   );
 }
+
 
 export default ProductPage;

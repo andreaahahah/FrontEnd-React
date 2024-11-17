@@ -122,8 +122,10 @@ export default function AdminPage() {
           immagini: [],
           categoria: "",
         });
+        navigate("/");
       } 
     } catch (error) {
+      console.log(error)
       showToast.error(`${error.response.data}`);
       
     }

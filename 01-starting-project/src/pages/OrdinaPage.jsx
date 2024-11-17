@@ -79,7 +79,21 @@ export default function OrdinaPage() {
       newAddress.città &&
       newAddress.via
     ) 
-    if(newAddress.cap.length<4 || newAddress.cap.length>5){
+    if(!newAddress.cap || newAddress.cap.length!=5 || newAddress.cap<1 ){
+      showToast.error(`Il cap non sembra essere vero`)
+      return;
+    }
+    if(newAddress.città.length<1){
+      console.log(`ecco il cap ${newAddress.cap}`)
+      showToast.error(`La città non sembra esistere`)
+      return;
+    }
+    if(newAddress.nazione.length<1){
+      showToast.error(`La nazione non sembra esistere`)
+      return;
+    }
+    if(newAddress.via.length<1){
+      showToast.error(`La via non sembra esistere`)
       return;
     }
     {
@@ -122,11 +136,25 @@ export default function OrdinaPage() {
     const { numeroCarta, nomeCarta, meseScadenza, annoScadenza, tipoCarta } =
       newPayment;
 
-    if (numeroCarta && nomeCarta && meseScadenza && annoScadenza && tipoCarta) {
-      if(meseScadenza<1 || meseScadenza>12){
-          return;
+    if (!numeroCarta || numeroCarta.length<1) {
+      showToast.error(`Quel numero carta non sembra corretto`)
+      return;
+    }
+    if(!nomeCarta|| nomeCarta.length<1){
+      showToast.error(`Quel nome non sembra esistere`)
+      return;
+    }
+    if(!tipoCarta|| tipoCarta.length<1){
+      showToast.error(`Quel tipo di carta non sembra esistere`)
+      return;
+    }
+      if(!meseScadenza||meseScadenza<1 || meseScadenza>12){
+        showToast.error(`Quel mese non sembra esistere`)
+        return;
+        
       }
-      if(annoScadenza<2024 || annoScadenza>2100){
+      if(!annoScadenza|| annoScadenza<2024 || annoScadenza>2100){
+          showToast.error(`L'anno di scadenza mi sembra strano`)
           return;
       }
       const dataScadenza = `${annoScadenza}-${meseScadenza.padStart(
@@ -171,7 +199,7 @@ export default function OrdinaPage() {
           });
         })
         
-    }
+    
   };
 
   const handleConferma = () => {
@@ -194,8 +222,8 @@ export default function OrdinaPage() {
     // Invio della richiesta POST
     axios
       .post(ordineUrl, body, authHeader)
-      .then((response) => {
-        console.log("Ordine confermato:", response);
+      .then(() => {
+        showToast.success(`Ordine Confermato`)
         clearCart();
         navigate("/");
       })
@@ -330,7 +358,7 @@ export default function OrdinaPage() {
 
               <input
                 type="text"
-                placeholder="Tipo Carta"
+                placeholder="Tipo Carta. es: Visa, Mastercard"
                 value={newPayment.tipoCarta}
                 onChange={(e) =>
                   setNewPayment({ ...newPayment, tipoCarta: e.target.value })
