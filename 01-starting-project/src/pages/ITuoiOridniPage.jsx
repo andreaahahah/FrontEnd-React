@@ -6,6 +6,7 @@ import { AuthContext } from '../GlobalContext/AuthContext';
 import { baseurl } from "../config";
 import { LoadingContext } from '../GlobalContext/LoadingContext';
 import Spinner from '../Components/Spinner';
+import { showToast } from "../ToastManager";
 
 export default function ITuoiOrdini() {
     const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
@@ -36,8 +37,7 @@ export default function ITuoiOrdini() {
                 setIsLoaded(true); // Segnala che i dati sono stati caricati
             })
             .catch(error => {
-                console.error("Errore nel caricamento degli ordini:", error);
-                setIsLoaded(true); // In caso di errore, comunque segna il caricamento come completo
+                showToast.error("C'è stato qualche errore");
             });
             endLoading();
     }, [token]); // Dipende dal token, quindi verrà rieseguito solo se cambia

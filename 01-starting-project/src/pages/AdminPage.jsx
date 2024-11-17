@@ -11,12 +11,21 @@ import axios from "axios";
 import { AuthContext } from "../GlobalContext/AuthContext";
 import { useTranslation } from "react-i18next";
 import { baseurl } from "../config";
+import { showToast } from "../ToastManager";
 
 export default function AdminPage() {
   const { isAuthenticated, userRoles, keycloak } = useContext(AuthContext);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+
+  const handleError = () => {
+    showToast.error("Errore nei dati inseriti!");
+  };
+
+  const handleSuccess = () => {
+    showToast.success("Operazione completata con successo!");
+  };
 
   const handleLanguageChange = (e) => {
     const newLang = e.target.value;
@@ -59,16 +68,25 @@ export default function AdminPage() {
   };
 
   const handleSaveProduct = async () => {
+    
     if (
       !productData.nome ||
       !productData.descrizione ||
-      productData.prezzo <= 0 ||
+      
       !productData.marca ||
-      productData.quantita <= 0 ||
+      
       !productData.categoria ||
       productData.immagini.length === 0
     ) {
-      alert(t("adminPage.validationError"));
+      showToast.error("Devi riempire tutti i campi");;
+      return;
+    }
+    if(productData.prezzo <= 0 ){
+      showToast.error("Alza il prezzo, non facciamo regali");
+      return;
+    }
+    if(productData.quantita <= 0 ){
+      showToast.error("La quantità dovrebbe essere maggiore di 0");
       return;
     }
 
@@ -93,7 +111,7 @@ export default function AdminPage() {
       );
 
       if (response.status >= 200 && response.status < 300) {
-        alert(t("adminPage.successMessage"));
+        showToast.success("Prodoto inserito correttamente");;
         setProductData({
           nome: "",
           descrizione: "",
@@ -104,12 +122,10 @@ export default function AdminPage() {
           immagini: [],
           categoria: "",
         });
-      } else {
-        alert(t("adminPage.errorMessage"));
-      }
+      } 
     } catch (error) {
-      console.error("Errore durante il salvataggio del prodotto:", error);
-      alert(t("adminPage.errorMessage"));
+      showToast.error(`${error.response.data}`);
+      
     }
   };
 

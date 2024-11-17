@@ -120,9 +120,32 @@ export const CartProvider = ({ children }) => {
     localStorage.removeItem("cart");
   };
 
+  const clearCartAfterError = async () => {
+    setCartItems([]); // Pulisci lo stato locale del carrello
+    localStorage.removeItem("cart"); // Pulisci il localStorage
+  
+    try {
+      const token = keycloak?.token;
+      if (token) {
+        // Recupera il carrello dal backend per sincronizzare i dati
+        const response = await axios.get(`${baseurl}/carrello/elenca`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCartItems(response.data);
+        //TODO mappalo bene quando lo metti nel carrello
+        localStorage.setItem("cart", JSON.stringify(response.data));
+        console.log("Carrello recuperato dopo l'errore:", response.data);
+      }
+    } catch (error) {
+      console.error("Errore nel recupero del carrello dopo un errore:", error);
+    }
+  };
+  
+  
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+      value={{ cartItems, addToCart, removeFromCart, clearCart, clearCartAfterError }}
     >
       {children}
     </CartContext.Provider>

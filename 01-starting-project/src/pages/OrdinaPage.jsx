@@ -8,11 +8,12 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { AuthContext } from "../GlobalContext/AuthContext";
 import { baseurl } from "../config";
 import { LoadingContext } from "../GlobalContext/LoadingContext";
+import { showToast } from "../ToastManager";
 
 export default function OrdinaPage() {
   const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
   const { keycloak } = useContext(AuthContext);
-  const { cartItems, clearCart } = useCart();
+  const { cartItems, clearCart, clearCartAfterError } = useCart();
   const navigate = useNavigate();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -41,18 +42,14 @@ export default function OrdinaPage() {
       .then((response) => {
         setAddresses(response.data);
       })
-      .catch((error) =>
-        console.error("Errore nel caricamento degli indirizzi:", error)
-      );
+      
 
     axios
       .get(`${baseurl}/utente/getPagamento`, authHeader)
       .then((response) => {
         setPayments(response.data);
       })
-      .catch((error) =>
-        console.error("Errore nel caricamento dei pagamenti:", error)
-      );
+     
 
     endLoading();
   }, [cartItems, navigate]);
@@ -100,6 +97,9 @@ export default function OrdinaPage() {
             },
           }
         )
+        .catch((error)=>
+          showToast.error(`${error.response.data}`)
+        )
         .then((response) => {
           console.log(response.data);
           // Chiamata GET per aggiornare la lista degli indirizzi
@@ -114,9 +114,7 @@ export default function OrdinaPage() {
 
           setNewAddress({ nazione: "", cap: "", città: "", via: "" });
         })
-        .catch((error) =>
-          console.error("Errore nell'aggiunta dell'indirizzo:", error)
-        );
+       
     }
   };
 
@@ -128,7 +126,7 @@ export default function OrdinaPage() {
       if(meseScadenza<1 || meseScadenza>12){
           return;
       }
-      if(annoScadenza<2024 || annoScadenza>2010){
+      if(annoScadenza<2024 || annoScadenza>2100){
           return;
       }
       const dataScadenza = `${annoScadenza}-${meseScadenza.padStart(
@@ -150,6 +148,9 @@ export default function OrdinaPage() {
             },
           }
         )
+        .catch((error)=>
+          showToast.error(`${error.response.data}`)
+        )
         .then(() => {
           // Chiamata GET per aggiornare la lista dei pagamenti
           axios
@@ -169,9 +170,7 @@ export default function OrdinaPage() {
             tipoCarta: "",
           });
         })
-        .catch((error) =>
-          console.error("Errore nell'aggiunta del pagamento:", error)
-        );
+        
     }
   };
 
@@ -200,9 +199,11 @@ export default function OrdinaPage() {
         clearCart();
         navigate("/");
       })
-      .catch((error) => {
-        console.error("Errore nel confermare l'ordine:", error);
-      });
+     .catch((error)=>{
+          showToast.error(`${error.response.data}`)
+          clearCartAfterError();
+          navigate("/");
+  });
   };
 
   return (
